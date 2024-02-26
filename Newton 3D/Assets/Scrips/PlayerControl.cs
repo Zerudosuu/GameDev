@@ -1,86 +1,39 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Collections.Specialized;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerControl : MonoBehaviour
 {
-    // Start is called before the first frame update
-
     public float speed;
-    private Vector2 move,
-        mouseLook;
-    private Vector3 rotationTarget;
+    public float rotationSpeed;
+    private CharacterController characterController;
 
-    public bool isPC;
-
-    public void OnMove(InputAction.CallbackContext context)
+    void Start()
     {
-        move = context.ReadValue<Vector2>();
+        characterController = GetComponent<CharacterController>();
     }
 
-    public void OnMouseLook(InputAction.CallbackContext context)
-    {
-        mouseLook = context.ReadValue<Vector2>();
-    }
-
-    void Start() { }
-
-    // Update is called once per frame
     void Update()
     {
-        if (isPC)
+        float horizontalInput = Input.GetAxis("Horizontal");
+        float verticalInput = Input.GetAxis("Vertical");
+
+        Vector3 movementDirection = new Vector3(horizontalInput, 0, verticalInput);
+
+        float magnitude = Mathf.Clamp01(movementDirection.magnitude) * speed;
+
+        characterController.SimpleMove(movementDirection * magnitude);
+
+        if (movementDirection != Vector3.zero)
         {
-            RaycastHit hit;
-            Ray ray = Camera.main.ScreenPointToRay(mouseLook);
+            Quaternion toRotation = Quaternion.LookRotation(movementDirection, Vector3.up);
 
-            if (Physics.Raycast(ray, out hit))
-            {
-                rotationTarget = hit.point;
-            }
-
-            MovePlayerWithAim();
-        }
-        else
-        {
-            MovePlayer();
-        }
-    }
-
-    public void MovePlayer()
-    {
-        Vector3 movement = new Vector3(move.x, 0f, move.y);
-
-        if (movement != Vector3.zero)
-        {
-            transform.rotation = Quaternion.Slerp(
+            transform.rotation = Quaternion.RotateTowards(
                 transform.rotation,
-                Quaternion.LookRotation(movement),
-                0.15f
+                toRotation,
+                rotationSpeed * Time.deltaTime
             );
         }
-
-        transform.Translate(speed * Time.deltaTime * movement, Space.World);
-    }
-
-    public void MovePlayerWithAim()
-    {
-        if (isPC)
-        {
-            var lookPos = rotationTarget - transform.position;
-            lookPos.y = 0;
-            var rotation = Quaternion.LookRotation(lookPos);
-
-            Vector3 aimDirection = new Vector3(rotationTarget.x, 0f, rotationTarget.z);
-
-            if (aimDirection != Vector3.zero)
-            {
-                transform.rotation = Quaternion.Slerp(transform.rotation, rotation, 0.15f);
-            }
-        }
-
-        Vector3 movement = new Vector3(move.x, 0f, move.y);
-        transform.Translate(speed * Time.deltaTime * movement, Space.World);
     }
 }
