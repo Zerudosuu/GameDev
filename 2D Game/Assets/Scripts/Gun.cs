@@ -23,6 +23,8 @@ public class Gun : MonoBehaviour
 
     public bool isCharging;
 
+    public float timeRemaining = 5;
+
     // Update is called once per frame
     void Update()
     {
