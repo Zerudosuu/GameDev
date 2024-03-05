@@ -34,6 +34,7 @@ public class Enemybullet : MonoBehaviour
             // Set the "hasCollided" parameter to true, triggering the transition to "Break" animation
             animator.SetBool("hasCollided", true);
 
+            rb.velocity = Vector2.zero;
             StartCoroutine(DestroyBulletAfterAnimation());
         }
     }
@@ -41,7 +42,9 @@ public class Enemybullet : MonoBehaviour
     IEnumerator DestroyBulletAfterAnimation()
     {
         // Wait for the duration of the "Break" animation
-        yield return new WaitForSeconds(animator.GetCurrentAnimatorClipInfo(0)[0].clip.length);
+        yield return new WaitForSeconds(
+            animator.GetCurrentAnimatorClipInfo(0)[0].clip.length - .3f
+        );
 
         // Destroy the bullet GameObject after the animation has played
         Destroy(gameObject);

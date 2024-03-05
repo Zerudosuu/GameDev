@@ -20,10 +20,17 @@ public class PlayerMovement : MonoBehaviour
     [Header("DashingProperty")]
     private bool canDash = true;
     private bool isDashing;
-    private float dashingPower = 24f;
+    private float dashingPower = 30f;
 
     private float dashingTime = 0.2f;
     private float dashingCooldown = 1f;
+
+    private Animator animator;
+
+    void Start()
+    {
+        animator = GetComponent<Animator>();
+    }
 
     void Update()
     {
@@ -31,16 +38,28 @@ public class PlayerMovement : MonoBehaviour
         {
             return;
         }
+
         horizontal = Input.GetAxisRaw("Horizontal");
+
+        if (horizontal > 0.1f || horizontal < -0.1f)
+        {
+            animator.SetBool("isMoving", true);
+        }
+        else
+        {
+            animator.SetBool("isMoving", false);
+        }
 
         if (Input.GetButtonDown("Jump") && IsGrounded())
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
+            animator.SetBool("isJumping", true);
         }
 
         if (Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
         {
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
+            animator.SetBool("isJumping", false);
         }
 
         if (horizontal > 0 && isFacingRight == false)
@@ -50,6 +69,11 @@ public class PlayerMovement : MonoBehaviour
         else if (horizontal < 0 && isFacingRight == true)
         {
             Flip();
+        }
+
+        if (IsGrounded())
+        {
+            animator.SetBool("isJumping", false);
         }
 
         if (Input.GetMouseButtonDown(1) && canDash)

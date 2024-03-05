@@ -25,7 +25,16 @@ public class Gun : MonoBehaviour
 
     public float timeRemaining = 5;
 
+    private Animator animator;
+
     // Update is called once per frame
+
+
+    void Start()
+    {
+        animator = GetComponent<Animator>();
+    }
+
     void Update()
     {
         if (Input.GetMouseButton(0) && chargeTime < 5)
@@ -40,8 +49,10 @@ public class Gun : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
+            animator.SetBool("isAttacking", true);
             Instantiate(projectile, firepoint.position, firepoint.rotation);
             chargeTime = 0;
+            animator.SetBool("isAttacking", false);
         }
         else if (Input.GetMouseButtonUp(0) && chargeTime >= 2)
         {
