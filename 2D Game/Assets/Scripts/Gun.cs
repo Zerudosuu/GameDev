@@ -49,13 +49,14 @@ public class Gun : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
+            Debug.Log("Mouse button down - starting attack");
             animator.SetBool("isAttacking", true);
-            Instantiate(projectile, firepoint.position, firepoint.rotation);
+
             chargeTime = 0;
-            animator.SetBool("isAttacking", false);
         }
         else if (Input.GetMouseButtonUp(0) && chargeTime >= 2)
         {
+            Debug.Log("Mouse button up - releasing charge");
             ReleaseCharge();
         }
     }
@@ -66,5 +67,11 @@ public class Gun : MonoBehaviour
         isCharging = false;
 
         chargeTime = 0;
+    }
+
+    void Shoot()
+    {
+        Instantiate(projectile, firepoint.position, firepoint.rotation);
+        
     }
 }
