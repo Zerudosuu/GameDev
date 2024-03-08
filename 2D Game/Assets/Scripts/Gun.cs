@@ -67,7 +67,7 @@ public class Gun : MonoBehaviour
         chargeTime = 0;
     }
 
-    void Shoot()
+    public void Shoot()
     {
         Instantiate(projectile, firepoint.position, firepoint.rotation);
     }
@@ -75,5 +75,26 @@ public class Gun : MonoBehaviour
     public void EndAttack()
     {
         animator.SetBool("isAttacking", false);
+        animator.SetBool("isMoving", true);
+        animator.SetBool("isJumping", false);
+    }
+
+    // Method to be called from the Animation Event
+    void ResetAnimation()
+    {
+        animator.SetBool("isAttacking", false);
+        animator.Play("Slingshot"); // Replace "YourAnimationName" with the actual animation name
+    }
+
+    // Method to set up the Animation Event
+    void SetupAnimationEvent()
+    {
+        AnimationClip clip = animator.runtimeAnimatorController.animationClips[6]; // Assuming it's the first animation clip
+        AnimationEvent animationEvent = new AnimationEvent
+        {
+            functionName = "ResetAnimation",
+            time = 0
+        };
+        clip.AddEvent(animationEvent);
     }
 }

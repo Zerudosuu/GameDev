@@ -44,6 +44,8 @@ public class PlayerMovement : MonoBehaviour
         if (horizontal > 0.1f || horizontal < -0.1f)
         {
             animator.SetBool("isMoving", true);
+            animator.SetBool("isAttacking", false);
+            animator.SetBool("isJumping", false);
         }
         else
         {
@@ -54,12 +56,16 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
             animator.SetBool("isJumping", true);
+            animator.SetBool("isMoving", false);
+            animator.SetBool("isAttacking", false);
         }
 
         if (Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
         {
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
             animator.SetBool("isJumping", false);
+            animator.SetBool("isMoving", true);
+            animator.SetBool("isAttacking", false);
         }
 
         if (horizontal > 0 && isFacingRight == false)

@@ -16,15 +16,60 @@ public class EnemyAttack : MonoBehaviour
     public float radius;
     public LayerMask mainTarget;
 
+    public Transform attackPoint1;
+    public Transform attackPoint2;
+    private Transform mainTargetPosition;
+    public Transform AttackPointFinal;
+    public float movementSpeed = 1f;
+
+    private bool isFacingRight = true;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+
+        attackPoint1 = GameObject.FindGameObjectWithTag("AttackPoint1")?.transform;
+        attackPoint2 = GameObject.FindGameObjectWithTag("AttackPoint2")?.transform;
+
+        mainTargetPosition = GameObject.FindGameObjectWithTag("Tower")?.transform;
+        if (attackPoint1 == null || attackPoint2 == null)
+        {
+            Debug.LogError("Attack points not found or tagged correctly.");
+            return;
+        }
+
+        // Check the enemy's initial position and set the appropriate attack point
+        if (transform.position.x < 0)
+        {
+            AttackPointFinal = attackPoint1;
+        }
+        else
+        {
+            AttackPointFinal = attackPoint2;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (transform.localPosition != AttackPointFinal.position)
+        {
+            transform.localPosition = Vector3.MoveTowards(
+                transform.localPosition,
+                AttackPointFinal.position,
+                Time.deltaTime * movementSpeed
+            );
+        }
+
+        if (transform.localPosition == AttackPointFinal.position)
+        {
+            willAttack = true;
+        }
+        else
+        {
+            willAttack = false;
+        }
         if (willAttack)
         {
             animator.SetBool("isAttacking", true);
@@ -33,6 +78,21 @@ public class EnemyAttack : MonoBehaviour
         {
             animator.SetBool("isAttacking", false);
         }
+
+        if (mainTargetPosition.position.x < transform.position.x && isFacingRight)
+        {
+            Flip();
+        }
+        else if (mainTargetPosition.position.x > transform.position.x && !isFacingRight)
+        {
+            Flip();
+        }
+    }
+
+    private void Flip()
+    {
+        transform.Rotate(0f, 180f, 0f);
+        isFacingRight = !isFacingRight;
     }
 
     public void EndAttack()
@@ -50,22 +110,25 @@ public class EnemyAttack : MonoBehaviour
 
         foreach (Collider2D target in targets)
         {
-            Debug.Log("Hit Player");
+            if (target.CompareTag("Tower"))
+            {
+                Debug.Log("Tower was hit!");
+            }
         }
     }
 
-    void OnTriggerEnter2D(Collider2D trig)
-    {
-        if (trig.gameObject.CompareTag("Player"))
-        {
-            willAttack = true;
-        }
-    }
+    // void OnTriggerStay2D(Collider2D trig)
+    // {
+    //     if (trig.gameObject.CompareTag("Tower"))
+    //     {
+    //         willAttack = true;
+    //     }
+    // }
 
-    void OnTriggerExit2D(Collider2D other)
-    {
-        willAttack = false;
-    }
+    // void OnTriggerExit2D(Collider2D other)
+    // {
+    //     willAttack = false;
+    // }
 
     void OnDrawGizmos()
     {
