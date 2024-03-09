@@ -18,7 +18,7 @@ public class PlayerMovement : MonoBehaviour
     private LayerMask groundLayer;
 
     [Header("DashingProperty")]
-    private bool canDash = true;
+    public bool canDash = true;
     private bool isDashing;
     private float dashingPower = 30f;
 

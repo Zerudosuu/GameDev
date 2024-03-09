@@ -12,13 +12,17 @@ public class Wave
     public float spawnInterval;
 }
 
+public class UpperWave : Wave { }
+
 public class WaveSpawner : MonoBehaviour
 {
     [SerializeField]
     Wave[] waves;
 
+    public Transform[] spawnPointsUp;
     public Transform[] spawnPoints;
     private Wave currentWave;
+    private UpperWave upperCurrentWave;
     private int currentWaveNumber;
     private float nextSpawnTime;
 

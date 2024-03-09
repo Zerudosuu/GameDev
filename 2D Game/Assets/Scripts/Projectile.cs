@@ -13,6 +13,8 @@ public class Projectile : MonoBehaviour
     [SerializeField]
     private float lifetime;
 
+    public bool washit = false;
+
     void Start()
     {
         rb.velocity = transform.right * speed;
