@@ -1,18 +1,55 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public GameObject Instruction;
+    public GameObject WaveSpawner;
+    public GameObject preGameWarning;
+    public GameObject GameOverUI;
+
     void Start()
     {
-        
+        Instruction.SetActive(true);
+        WaveSpawner.SetActive(false);
+        preGameWarning.SetActive(false);
+
+        StartCoroutine(WaitForEnterKey());
     }
 
-    // Update is called once per frame
-    void Update()
+    private IEnumerator WaitForEnterKey()
     {
-        
+        while (!Input.GetKeyDown(KeyCode.Return))
+        {
+            yield return null;
+        }
+
+        // Player pressed Enter, disable the Instruction panel
+        PressEnterToStart();
+    }
+
+    public void PressEnterToStart()
+    {
+        Instruction.SetActive(false);
+        preGameWarning.SetActive(true); // Activate preGameWarning
+        Invoke("WarningOff", 2);
+        WaveSpawner.SetActive(true);
+    }
+
+    void WarningOff()
+    {
+        preGameWarning.SetActive(false); // Deactivate preGameWarning after 2 seconds
+    }
+
+    public void GameOver()
+    {
+        GameOverUI.SetActive(true);
+        Time.timeScale = 0;
+    }
+
+    public void tryAgain()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

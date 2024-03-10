@@ -54,6 +54,15 @@ public class EnemyAttack : MonoBehaviour
                 Health towerHealth = target.GetComponent<Health>(); // get the health scriptsa tower
                 if (towerHealth != null) // if may health script na nakua
                     towerHealth.TakeDamage(damage); // call the takeDamage method sa health script kang tower
+                GameManager gameManager = FindAnyObjectByType<GameManager>();
+
+                if (gameManager != null)
+                {
+                    if (towerHealth.currentHealth <= 0)
+                    {
+                        gameManager.GameOver();
+                    }
+                }
             }
 
             if (target.CompareTag("Player"))
@@ -62,6 +71,16 @@ public class EnemyAttack : MonoBehaviour
                 Health PlayerHealth = target.GetComponent<Health>(); // get the health scriptsa tower
                 if (PlayerHealth != null) // if may health script na nakua
                     PlayerHealth.TakeDamage(damage); // call the takeDamage method sa health script kang tower
+
+                GameManager gameManager = FindAnyObjectByType<GameManager>();
+
+                if (gameManager != null)
+                {
+                    if (PlayerHealth.currentHealth <= 0)
+                    {
+                        gameManager.GameOver();
+                    }
+                }
             }
         }
     }

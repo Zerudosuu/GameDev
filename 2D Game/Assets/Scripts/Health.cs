@@ -21,14 +21,5 @@ public class Health : MonoBehaviour
     {
         currentHealth -= damage;
         healthBar.value = currentHealth;
-        if (currentHealth <= 0 && gameObject.tag == "Enemy")
-        {
-            Die();
-        }
     } // Update is called once per frame
-
-    public void Die()
-    {
-        Destroy(gameObject);
-    }
 }

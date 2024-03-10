@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 7432595633853692693}
   - component: {fileID: -3485828553694422794}
   - component: {fileID: 8955941756027385823}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Skeleton
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -215,13 +215,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89f960ab6bdca9a49912ed1adcf0b040, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 1
+  movementSpeed: 3
   AttackPointFinal: {fileID: 0}
   attackPoint1: {fileID: 0}
   attackPoint2: {fileID: 0}
+  mainTargetPosition: {fileID: 0}
   willAttack: 0
   speed: 2
   rb: {fileID: 0}
+  isDeadClip: {fileID: 7400000, guid: e8a077e42db54f848850a5a8074a9192, type: 2}
+  wasHit: {fileID: 7400000, guid: 520c457fe4d7ad24e902e6c7ef5fd7c7, type: 2}
+  manaCrystalPrefab: {fileID: 8456808006368538386, guid: 1670c2391480dd346b87f39bc19b6af8, type: 3}
+  manaCrystalDropProbability: 0.2
 --- !u!114 &8955941756027385823
 MonoBehaviour:
   m_ObjectHideFlags: 0

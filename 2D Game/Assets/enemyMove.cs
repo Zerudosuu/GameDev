@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,7 +16,7 @@ public class enemyMove : MonoBehaviour
 
     public Transform attackPoint1;
     public Transform attackPoint2;
-    private Transform mainTargetPosition;
+    public Transform mainTargetPosition;
 
     public bool willAttack;
 
@@ -25,6 +26,13 @@ public class enemyMove : MonoBehaviour
 
     public Rigidbody2D rb;
 
+    private Animator animator;
+
+    public AnimationClip isDeadClip;
+    public AnimationClip wasHit;
+    public GameObject manaCrystalPrefab;
+    public float manaCrystalDropProbability = 0.5f;
+
     #endregion
 
 
@@ -32,6 +40,10 @@ public class enemyMove : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
+
+        // Update
+
         attackPoint1 = GameObject.FindGameObjectWithTag("AttackPoint1")?.transform;
         attackPoint2 = GameObject.FindGameObjectWithTag("AttackPoint2")?.transform;
 
@@ -64,6 +76,8 @@ public class enemyMove : MonoBehaviour
     {
         if (transform.localPosition != AttackPointFinal.position)
         {
+            animator.SetBool("isMoving", true);
+            animator.SetBool("isAttacking", false);
             transform.localPosition = Vector3.MoveTowards(
                 transform.localPosition,
                 AttackPointFinal.position,
@@ -74,10 +88,11 @@ public class enemyMove : MonoBehaviour
         if (transform.localPosition == AttackPointFinal.position)
         {
             willAttack = true;
-        }
-        else
-        {
-            willAttack = false;
+            if (willAttack)
+            {
+                animator.SetBool("isMoving", false);
+                animator.SetBool("isAttacking", true);
+            }
         }
 
         if (mainTargetPosition.position.x < transform.position.x && isFacingRight)
@@ -101,7 +116,51 @@ public class enemyMove : MonoBehaviour
             // Apply knockback force
             Knockback(trig);
             // rb.AddForce(direction * speed, ForceMode2D.Impulse);
+
+            if (enemyHealth.currentHealth <= 0)
+            {
+                rb.velocity = Vector2.zero;
+                StartCoroutine(DestroyWithAnimation());
+            }
         }
+    }
+
+    void OnTriggerStay2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("ChargedBullet"))
+        {
+            Health enemyHealth = GetComponent<Health>();
+            if (enemyHealth != null)
+                enemyHealth.TakeDamage(2);
+
+            // Apply knockback forc
+            // rb.AddForotherce(direction * speed, ForceMode2D.Impulse);
+
+            if (enemyHealth.currentHealth <= 0)
+            {
+                rb.velocity = Vector2.zero;
+                StartCoroutine(DestroyWithAnimation());
+            }
+        }
+    }
+
+    IEnumerator DestroyWithAnimation()
+    {
+        // Play the "isDead" animation
+        animator.SetBool("isDead", true);
+        animator.SetBool("isAttacking", false);
+        animator.SetBool("isMoving", false);
+
+        // Wait for the duration of the "isDead" animation
+        yield return new WaitForSeconds(isDeadClip.length);
+        // Destroy the game object after the animation has played
+
+        // Check if the mana crystal should be dropped based on the probability
+        if (UnityEngine.Random.value < manaCrystalDropProbability)
+        {
+            DropManaCrystal();
+        }
+        Destroy(gameObject);
     }
 
     public void Knockback(Collider2D trig)
@@ -110,13 +169,36 @@ public class enemyMove : MonoBehaviour
 
         if (isFacingRight)
         {
-            transform.Translate(trig.transform.right * 2);
+            transform.Translate(trig.transform.right * 1);
         }
         else
         {
-            transform.Translate(-trig.transform.right * 2);
+            transform.Translate(-trig.transform.right * 1);
         }
 
         Destroy(trig.gameObject);
+
+        StartCoroutine(TakenHitWithAnimation());
+    }
+
+    IEnumerator TakenHitWithAnimation()
+    {
+        Debug.Log("Was hit!");
+        // Play the "isDead" animation
+        animator.SetBool("wasHit", true);
+
+        // Wait for the duration of the "isDead" animation
+        yield return new WaitForSeconds(wasHit.length);
+        // Destroy the game object after the animation has played
+        animator.SetBool("wasHit", false);
+    }
+
+    private void DropManaCrystal()
+    {
+        // Instantiate mana crystal at the enemy's position
+        if (manaCrystalPrefab != null)
+        {
+            Instantiate(manaCrystalPrefab, transform.position, Quaternion.identity);
+        }
     }
 }

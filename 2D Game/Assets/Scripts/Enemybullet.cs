@@ -17,26 +17,12 @@ public class Enemybullet : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        target = GameObject.FindGameObjectWithTag("Player");
+        target = GameObject.FindGameObjectWithTag("Tower");
 
         direction = target.transform.position - transform.position;
         rb.velocity = new Vector2(direction.x, direction.y).normalized * force;
 
         animator = GetComponent<Animator>();
-    }
-
-    void Update() { }
-
-    void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
-        {
-            // Set the "hasCollided" parameter to true, triggering the transition to "Break" animation
-            animator.SetBool("hasCollided", true);
-
-            rb.velocity = Vector2.zero;
-            StartCoroutine(DestroyBulletAfterAnimation());
-        }
     }
 
     IEnumerator DestroyBulletAfterAnimation()
@@ -48,5 +34,30 @@ public class Enemybullet : MonoBehaviour
 
         // Destroy the bullet GameObject after the animation has played
         Destroy(gameObject);
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Tower"))
+        {
+            animator.SetBool("hasCollided", true);
+
+            // Check if the bullet is moving before stopping it
+            if (rb.velocity != Vector2.zero)
+            {
+                rb.velocity = Vector2.zero;
+                StartCoroutine(DestroyBulletAfterAnimation());
+
+                Health towerHealth = other.gameObject.GetComponent<Health>(); // get the health script of the tower
+                if (towerHealth != null) // if there is a health script
+                    towerHealth.TakeDamage(6); // call the TakeDamage method in the health script of the tower
+
+                if (towerHealth.currentHealth <= 0)
+                {
+                    GameManager gameManager = FindAnyObjectByType<GameManager>();
+                    gameManager.GameOver();
+                }
+            }
+        }
     }
 }

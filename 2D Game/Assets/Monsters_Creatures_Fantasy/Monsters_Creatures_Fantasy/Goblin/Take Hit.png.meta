@@ -113,9 +113,9 @@ TextureImporter:
       name: Take Hit_0
       rect:
         serializedVersion: 2
-        x: 10
+        x: 0
         y: 0
-        width: 147.5
+        width: 150
         height: 150
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -134,9 +134,9 @@ TextureImporter:
       name: Take Hit_1
       rect:
         serializedVersion: 2
-        x: 157
+        x: 150
         y: 0
-        width: 147.5
+        width: 150
         height: 150
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -145,7 +145,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 30e4a8f83018e31419b2584d38695675
+      spriteID: 1195d85e41c465b40a808936f7b68314
       internalID: 239229186
       vertices: []
       indices: 
@@ -155,9 +155,9 @@ TextureImporter:
       name: Take Hit_2
       rect:
         serializedVersion: 2
-        x: 304
+        x: 300
         y: 0
-        width: 147.5
+        width: 150
         height: 150
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -166,7 +166,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f7f0ffcd528e9d54dbc4a258623eb930
+      spriteID: ebe8eb8706378694f958903ff5710590
       internalID: -1671614303
       vertices: []
       indices: 
@@ -176,9 +176,9 @@ TextureImporter:
       name: Take Hit_3
       rect:
         serializedVersion: 2
-        x: 451
+        x: 450
         y: 0
-        width: 147.5
+        width: 150
         height: 150
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -187,7 +187,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3b643c20de7bcc5409bebfb395c63433
+      spriteID: 5ec2ec0c4ec3d7c488107dbccf5107e0
       internalID: 1220374883
       vertices: []
       indices: 

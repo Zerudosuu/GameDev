@@ -9,6 +9,10 @@ TagManager:
   - AttackPoint1
   - AttackPoint2
   - Bullet
+  - AttackPoint3
+  - AttackPoint4
+  - FlyingAttackPoint
+  - ChargedBullet
   layers:
   - Default
   - TransparentFX
@@ -22,8 +26,8 @@ TagManager:
   - Ememy
   - 
   - Tower
-  - 
-  - 
+  - GroundEnemy
+  - FlyingEnemy
   - 
   - 
   - 

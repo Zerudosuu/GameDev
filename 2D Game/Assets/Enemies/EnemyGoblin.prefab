@@ -47,7 +47,7 @@ GameObject:
   - component: {fileID: -4330821020738254624}
   - component: {fileID: 3234236331441566177}
   - component: {fileID: 7665823333449931003}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: EnemyGoblin
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -205,9 +205,14 @@ MonoBehaviour:
   AttackPointFinal: {fileID: 0}
   attackPoint1: {fileID: 0}
   attackPoint2: {fileID: 0}
+  mainTargetPosition: {fileID: 0}
   willAttack: 0
   speed: 2
-  rb: {fileID: 0}
+  rb: {fileID: 7047042124624425066}
+  isDeadClip: {fileID: 7400000, guid: c347f6cd4e3547a42a7d96876eda1f50, type: 2}
+  wasHit: {fileID: 7400000, guid: efd6174bd25281649a6c661effd04959, type: 2}
+  manaCrystalPrefab: {fileID: 8456808006368538386, guid: 1670c2391480dd346b87f39bc19b6af8, type: 3}
+  manaCrystalDropProbability: 0.5
 --- !u!61 &3234236331441566177
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -244,7 +249,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.475, y: 1.5}
+    oldSize: {x: 1.5, y: 1.5}
     newSize: {x: 1.475, y: 1.5}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
