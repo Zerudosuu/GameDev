@@ -188,7 +188,7 @@ MonoBehaviour:
   mainTarget:
     serializedVersion: 2
     m_Bits: 2048
-  damage: 3
+  damage: 2
 --- !u!114 &-4330821020738254624
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -201,13 +201,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89f960ab6bdca9a49912ed1adcf0b040, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 1
+  movementSpeed: 5
   AttackPointFinal: {fileID: 0}
   attackPoint1: {fileID: 0}
   attackPoint2: {fileID: 0}
   mainTargetPosition: {fileID: 0}
   willAttack: 0
-  speed: 2
   rb: {fileID: 7047042124624425066}
   isDeadClip: {fileID: 7400000, guid: c347f6cd4e3547a42a7d96876eda1f50, type: 2}
   wasHit: {fileID: 7400000, guid: efd6174bd25281649a6c661effd04959, type: 2}

@@ -202,7 +202,7 @@ MonoBehaviour:
   mainTarget:
     serializedVersion: 2
     m_Bits: 2304
-  damage: 4
+  damage: 3
 --- !u!114 &5442859024334452624
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -240,7 +240,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthBar: {fileID: 4427037873515509902}
-  maxHealth: 3
+  maxHealth: 5
   currentHealth: 0
 --- !u!1 &6784032850238828852
 GameObject:

@@ -50,6 +50,13 @@ public class GameManager : MonoBehaviour
 
     public void tryAgain()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        Time.timeScale = 1;
+        SceneManager.LoadScene("MainScene");
+    }
+
+    public void Mainmenu()
+    {
+        Time.timeScale = 1;
+        SceneManager.LoadScene("MainMenu");
     }
 }

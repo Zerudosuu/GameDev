@@ -203,7 +203,7 @@ MonoBehaviour:
   bullet: {fileID: 8660896407979893859, guid: e75a90cd0ec2809498aa0a7e26d0b077, type: 3}
   bulletPosition: {fileID: 738480079117766930}
   timer: 2
-  movementSpeed: 1
+  movementSpeed: 2
   AttackPointFinal: {fileID: 0}
   AttackPoints: []
   willAttack: 0
@@ -251,7 +251,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthBar: {fileID: 3577853790089282212}
-  maxHealth: 3
+  maxHealth: 6
   currentHealth: 0
 --- !u!1001 &543364321305614792
 PrefabInstance:

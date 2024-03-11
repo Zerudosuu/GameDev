@@ -159,7 +159,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 7.0007935, y: -232.98422}
+  m_AnchoredPosition: {x: 7.0007324, y: -232.98425}
   m_SizeDelta: {x: -1158.8, y: -465.9684}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &45275240
@@ -560,7 +560,7 @@ GameObject:
   - component: {fileID: 557522747}
   m_Layer: 5
   m_Name: Canvas
-  m_TagString: Untagged
+  m_TagString: Canvas
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

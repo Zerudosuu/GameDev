@@ -22,7 +22,6 @@ public class enemyMove : MonoBehaviour
 
     //public int Health = 3;
 
-    public float speed = 2;
 
     public Rigidbody2D rb;
 

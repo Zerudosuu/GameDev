@@ -161,6 +161,7 @@ namespace Complete
             if (other.gameObject.CompareTag("SpeedBooster"))
             {
                 Debug.Log("SpeedBooster Acquired");
+                Destroy(other.gameObject);
                 StartCoroutine(FastMovement());
             }
         }

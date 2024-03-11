@@ -2428,7 +2428,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 291, y: 79.20001}
+  m_AnchoredPosition: {x: 252, y: 79.20001}
   m_SizeDelta: {x: 446.412, y: 52.198}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &159923248
@@ -4907,7 +4907,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 422603722}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 681408790}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: Mainmenu
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &422603722
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13394,7 +13406,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 83.876785, y: 30}
+  m_AnchoredPosition: {x: 44.876785, y: 30}
   m_SizeDelta: {x: 421.3775, y: 52.198}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &933254670
@@ -13444,7 +13456,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 100
   m_WholeNumbers: 1
-  m_Value: 100
+  m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -13552,7 +13564,7 @@ Transform:
   m_GameObject: {fileID: 937692723}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -30.37, y: -10.69, z: 0}
+  m_LocalPosition: {x: -30.37, y: -11.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -13625,25 +13637,49 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waves:
-  - waveName: Wave1
-    NumberofEnemies: 10
+  - waveName: Goblins
+    NumberofEnemies: 20
     enemyLayer:
       serializedVersion: 2
       m_Bits: 0
     enemyTypes:
     - {fileID: 5797794812005706507, guid: 8ff385927bfb2e744b36883d2ab44f24, type: 3}
-    - {fileID: 5793041279374567249, guid: 474c9a0d69f506c4fa6b9eb67ad0aeb7, type: 3}
-    spawnInterval: 3
-  - waveName: Wave2
+    spawnInterval: 2
+  - waveName: 'MushroomParty! '
     NumberofEnemies: 15
     enemyLayer:
       serializedVersion: 2
       m_Bits: 0
     enemyTypes:
-    - {fileID: 1396653294138278092, guid: a6cb245fa9038354b9c4205054f99179, type: 3}
     - {fileID: 5793041279374567249, guid: 474c9a0d69f506c4fa6b9eb67ad0aeb7, type: 3}
-    - {fileID: 6883025652855297337, guid: be74e2037dec6ea44a7b0b4be7a94edf, type: 3}
     spawnInterval: 2
+  - waveName: UndeadTime
+    NumberofEnemies: 12
+    enemyLayer:
+      serializedVersion: 2
+      m_Bits: 0
+    enemyTypes:
+    - {fileID: 1396653294138278092, guid: a6cb245fa9038354b9c4205054f99179, type: 3}
+    spawnInterval: 4
+  - waveName: BatSarm
+    NumberofEnemies: 15
+    enemyLayer:
+      serializedVersion: 2
+      m_Bits: 0
+    enemyTypes:
+    - {fileID: 6883025652855297337, guid: be74e2037dec6ea44a7b0b4be7a94edf, type: 3}
+    spawnInterval: 4
+  - waveName: 'Monsters! '
+    NumberofEnemies: 30
+    enemyLayer:
+      serializedVersion: 2
+      m_Bits: 0
+    enemyTypes:
+    - {fileID: 6883025652855297337, guid: be74e2037dec6ea44a7b0b4be7a94edf, type: 3}
+    - {fileID: 5797794812005706507, guid: 8ff385927bfb2e744b36883d2ab44f24, type: 3}
+    - {fileID: 5793041279374567249, guid: 474c9a0d69f506c4fa6b9eb67ad0aeb7, type: 3}
+    - {fileID: 1396653294138278092, guid: a6cb245fa9038354b9c4205054f99179, type: 3}
+    spawnInterval: 4
   spawnPointsUp:
   - {fileID: 1431328410}
   - {fileID: 273467613}
@@ -15240,7 +15276,7 @@ Transform:
   m_GameObject: {fileID: 1584301242}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -15.22, y: -1.05, z: 0}
+  m_LocalPosition: {x: -15.22, y: -8.7, z: 0}
   m_LocalScale: {x: 13.07568, y: 13.07568, z: 13.07568}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -32509,7 +32545,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -151, y: 79.20001}
+  m_AnchoredPosition: {x: -190, y: 79.20001}
   m_SizeDelta: {x: 446.412, y: 52.198}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2024866587
@@ -32559,7 +32595,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 100
   m_WholeNumbers: 1
-  m_Value: 100
+  m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -32806,7 +32842,7 @@ Transform:
   m_GameObject: {fileID: 2060497188}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 25.2, y: -10.19, z: 0}
+  m_LocalPosition: {x: 25.2, y: -11.09, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

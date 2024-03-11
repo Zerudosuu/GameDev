@@ -50,7 +50,7 @@ public class Enemybullet : MonoBehaviour
 
                 Health towerHealth = other.gameObject.GetComponent<Health>(); // get the health script of the tower
                 if (towerHealth != null) // if there is a health script
-                    towerHealth.TakeDamage(6); // call the TakeDamage method in the health script of the tower
+                    towerHealth.TakeDamage(2); // call the TakeDamage method in the health script of the tower
 
                 if (towerHealth.currentHealth <= 0)
                 {

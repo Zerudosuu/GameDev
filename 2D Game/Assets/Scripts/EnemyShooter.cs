@@ -138,6 +138,25 @@ public class EnemyShooter : MonoBehaviour
         }
     }
 
+    void OnTriggerStay2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("ChargedBullet"))
+        {
+            Health enemyHealth = GetComponent<Health>();
+            if (enemyHealth != null)
+                enemyHealth.TakeDamage(2);
+
+            // Apply knockback forc
+            // rb.AddForotherce(direction * speed, ForceMode2D.Impulse);
+
+            if (enemyHealth.currentHealth <= 0)
+            {
+                rb.velocity = Vector2.zero;
+                StartCoroutine(DestroyWithAnimation());
+            }
+        }
+    }
+
     IEnumerator DestroyWithAnimation()
     {
         // Play the "isDead" animation
