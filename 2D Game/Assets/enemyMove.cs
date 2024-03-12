@@ -182,7 +182,6 @@ public class enemyMove : MonoBehaviour
 
     IEnumerator TakenHitWithAnimation()
     {
-        Debug.Log("Was hit!");
         // Play the "isDead" animation
         animator.SetBool("wasHit", true);
 

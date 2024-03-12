@@ -13,6 +13,7 @@ namespace Complete
 
         // public CameraControl m_CameraControl; // Reference to the CameraControl script for control during different phases.
         public Text m_MessageText; // Reference to the overlay Text to display winning text, etc.
+        public GameObject gameoverPanel;
         public GameObject m_TankPrefab; // Reference to the prefab the players will control.
         public TankManager[] m_Tanks; // A collection of managers for enabling and disabling different aspects of the tanks.
 
@@ -166,7 +167,8 @@ namespace Complete
             if (m_GameWinner != null)
             {
                 // If there is a game winner, restart the level.
-                SceneManager.LoadScene(0);
+                gameoverPanel.SetActive(true);
+                Time.timeScale = 0;
             }
             else
             {
@@ -305,6 +307,22 @@ namespace Complete
 
             // If no tanks have enough rounds to win, return null.
             return null;
+        }
+
+        public void tryAgain()
+        {
+            Time.timeScale = 1;
+            SceneManager.LoadScene("_Complete-Game");
+        }
+
+        public void MainMenu()
+        {
+            SceneManager.LoadScene("MainMenu");
+        }
+
+        public void Quit()
+        {
+            Application.Quit();
         }
 
         // Returns a string message to display at the end of each round.

@@ -27,6 +27,9 @@ public class PlayerMovement : MonoBehaviour
 
     private Animator animator;
 
+    public AnimationClip isDeadClip;
+    public AnimationClip wasHit;
+
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -128,5 +131,57 @@ public class PlayerMovement : MonoBehaviour
 
         yield return new WaitForSeconds(dashingCooldown);
         canDash = true;
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Enemy"))
+        {
+            Health playerHealth = GetComponent<Health>();
+            playerHealth.TakeDamage(2);
+
+            Knockback(other);
+
+            if (playerHealth.currentHealth <= 0)
+            {
+                StartCoroutine(DestroyWithAnimation());
+            }
+        }
+    }
+
+    IEnumerator DestroyWithAnimation()
+    {
+        animator.SetBool("isDead", true);
+
+        yield return new WaitForSeconds(isDeadClip.length);
+
+        Destroy(gameObject);
+    }
+
+    public void Knockback(Collider2D trig)
+    {
+        Vector3 direction = (transform.position - trig.transform.position).normalized;
+
+        if (isFacingRight)
+        {
+            transform.Translate(trig.transform.right * 1);
+        }
+        else
+        {
+            transform.Translate(-trig.transform.right * 1);
+        }
+
+        StartCoroutine(TakenHitWithAnimation());
+    }
+
+    IEnumerator TakenHitWithAnimation()
+    {
+        // Play the "isDead" animation
+        animator.SetBool("wasHit", true);
+
+        // Wait for the duration of the "isDead" animation
+        yield return new WaitForSeconds(wasHit.length);
+        // Destroy the game object after the animation has played
+        animator.SetBool("wasHit", false);
     }
 }

@@ -9,11 +9,16 @@ public class GameManager : MonoBehaviour
     public GameObject preGameWarning;
     public GameObject GameOverUI;
 
+    public GameObject OptionMenu;
+
+    private bool isOptionMenu = false;
+
     void Start()
     {
         Instruction.SetActive(true);
         WaveSpawner.SetActive(false);
         preGameWarning.SetActive(false);
+        OptionMenu.SetActive(false);
 
         StartCoroutine(WaitForEnterKey());
     }
@@ -58,5 +63,36 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 1;
         SceneManager.LoadScene("MainMenu");
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (isOptionMenu)
+            {
+                OptionMenu.SetActive(false);
+                isOptionMenu = false;
+                Time.timeScale = 1;
+            }
+            else
+            {
+                OptionMenu.SetActive(true);
+                isOptionMenu = true;
+                Time.timeScale = 0;
+            }
+        }
+    }
+
+    public void Resume()
+    {
+        OptionMenu.SetActive(false);
+        isOptionMenu = false;
+        Time.timeScale = 1;
+    }
+
+    public void Exit()
+    {
+        Application.Quit();
     }
 }

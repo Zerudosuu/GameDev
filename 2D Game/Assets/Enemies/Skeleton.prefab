@@ -201,7 +201,7 @@ MonoBehaviour:
   radius: 1.5
   mainTarget:
     serializedVersion: 2
-    m_Bits: 2048
+    m_Bits: 2304
   damage: 5
 --- !u!114 &-3485828553694422794
 MonoBehaviour:
