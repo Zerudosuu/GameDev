@@ -9,17 +9,24 @@ namespace Complete
         public AudioSource m_ExplosionAudio; // Reference to the audio that will play on explosion.
         public float m_MaxDamage = 100f; // The amount of damage done if the explosion is centred on a tank.
         public float m_ExplosionForce = 1000f; // The amount of force added to a tank at the centre of the explosion.
-        public float m_MaxLifeTime = 2f; // The time in seconds before the shell is removed.
         public float m_ExplosionRadius = 5f; // The maximum distance away from the explosion tanks can be and are still affected.
+        public float m_ExplosionDelay = 3f; // Time before the shell explodes after being fired.
+
+        private bool m_Exploded = false;
 
         private void Start()
         {
-            // If it isn't destroyed by then, destroy the shell after it's lifetime.
-            Destroy(gameObject, m_MaxLifeTime);
+            // Start the countdown before the explosion
+            Invoke("Explode", m_ExplosionDelay);
         }
 
-        private void OnTriggerEnter(Collider other)
+        private void Explode()
         {
+            if (m_Exploded)
+                return;
+
+            m_Exploded = true;
+
             // Collect all the colliders in a sphere from the shell's current position to a radius of the explosion radius.
             Collider[] colliders = Physics.OverlapSphere(
                 transform.position,
@@ -28,10 +35,9 @@ namespace Complete
             );
 
             // Go through all the colliders...
-            for (int i = 0; i < colliders.Length; i++)
+            foreach (Collider collider in colliders)
             {
-                // ... and find their rigidbody.
-                Rigidbody targetRigidbody = colliders[i].GetComponent<Rigidbody>();
+                Rigidbody targetRigidbody = collider.GetComponent<Rigidbody>();
 
                 // If they don't have a rigidbody, go on to the next collider.
                 if (!targetRigidbody)
@@ -51,7 +57,7 @@ namespace Complete
                 if (!targetHealth)
                     continue;
 
-                // Calculate the amount of damage the target should take based on it's distance from the shell.
+                // Calculate the amount of damage the target should take based on its distance from the shell.
                 float damage = CalculateDamage(targetRigidbody.position);
 
                 // Deal this damage to the tank.
