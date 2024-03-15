@@ -1,29 +1,40 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Callbacks;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour, IDamageable, IEnemyMovable
+public class Enemy : MonoBehaviour, IDamageable, IEnemyMoveable, ITriggerCheckable
 {
     [field: SerializeField]
-    public float Maxhealth { get; set; } = 100f;
-    public float Currenthealth { get; set; }
+    public float MaxHealth { get; set; } = 100f;
+    public float CurrentHealth { get; set; }
     public Rigidbody2D RB { get; set; }
     public bool isFacingRight { get; set; } = true;
 
-    #region State Machine Variables
-    public EnemyStateMachine StateMachine { get; set; }
-    public EnemyIdleState IdleState { get; set; }
-    public EnemyChaseState ChaseState { get; set; }
-    public EnemyAttackState AttackState { get; set; }
-    #endregion
+    public bool IsAggroed { get; set; }
+    public bool IsWithStrinikingDistance { get; set; }
 
-    #region Idle Variable
+    #region Idle Variables
 
+    public Rigidbody2D BulletPrefab;
     public float RandomMovementRange = 5f;
     public float RandomMovementSpeed = 1f;
+
     #endregion
-    private void Awake()
+
+    #region State Machine Variables
+
+
+    public EnemyStateMachine StateMachine { get; set; }
+
+    public EnemyIdleState IdleState { get; set; }
+
+    public EnemyAttackState AttackState { get; set; }
+
+    public EnemyChaseState ChaseState { get; set; }
+
+    #endregion
+
+    void Awake()
     {
         StateMachine = new EnemyStateMachine();
 
@@ -34,33 +45,27 @@ public class Enemy : MonoBehaviour, IDamageable, IEnemyMovable
 
     private void Start()
     {
-        Currenthealth = Maxhealth;
+        CurrentHealth -= MaxHealth;
         RB = GetComponent<Rigidbody2D>();
-
-        if (RB == null)
-        {
-            Debug.LogError("Rigidbody2D not found on " + name);
-        }
         StateMachine.Initialize(IdleState);
     }
 
-    private void Update()
+    void Update()
     {
         StateMachine.CurrentEnemyState.FrameUpdate();
     }
 
-    private void FixedUpdate()
+    void FixedUpdate()
     {
-        StateMachine.CurrentEnemyState.PhysicsUpdate();
+        StateMachine.CurrentEnemyState.FrameUpdate();
     }
 
-    #region Health / Die Functions
-
+    #region  Health/Die Functions
 
     public void Damage(float damageAmount)
     {
-        Currenthealth -= damageAmount;
-        if (Currenthealth <= 0f)
+        CurrentHealth -= damageAmount;
+        if (CurrentHealth <= 0)
         {
             Die();
         }
@@ -72,25 +77,24 @@ public class Enemy : MonoBehaviour, IDamageable, IEnemyMovable
     }
 
     #endregion
-
-    #region Movement Functions
+    #region  Movement Functions
     public void MoveEnemy(Vector2 velocity)
     {
         RB.velocity = velocity;
-        CheckForLeftOrRightFacing(velocity);
+        CheckForLeftorRightFacing(velocity);
     }
 
-    public void CheckForLeftOrRightFacing(Vector2 velocity)
+    public void CheckForLeftorRightFacing(Vector2 velocity)
     {
         if (isFacingRight && velocity.x < 0f)
         {
-            Vector3 rotator = new Vector3(transform.rotation.x, 180f, transform.rotation.z);
+            Vector3 rotator = new Vector3(transform.position.x, 180f, transform.position.z);
             transform.rotation = Quaternion.Euler(rotator);
             isFacingRight = !isFacingRight;
         }
-        else
+        else if (!isFacingRight && velocity.x > 0f)
         {
-            Vector3 rotator = new Vector3(transform.rotation.x, 0f, transform.rotation.z);
+            Vector3 rotator = new Vector3(transform.position.x, 0f, transform.position.z);
             transform.rotation = Quaternion.Euler(rotator);
             isFacingRight = !isFacingRight;
         }
@@ -98,9 +102,7 @@ public class Enemy : MonoBehaviour, IDamageable, IEnemyMovable
 
     #endregion
 
-
-    #region Animation Triggers
-
+    #region Animaton Triggers
 
     private void AnimationTriggerEvent(AnimationTriggerType triggerType)
     {
@@ -109,8 +111,22 @@ public class Enemy : MonoBehaviour, IDamageable, IEnemyMovable
 
     public enum AnimationTriggerType
     {
-        EnemyDamaged,
-        PlayFootstepSound
+        EnemyDamage,
+        PlayFootStepSounds
     }
+
+    #endregion
+
+    #region Distance Check
+    public void SetAggroStatus(bool isAggroed)
+    {
+        IsAggroed = isAggroed;
+    }
+
+    public void SetStrikingDistanceBool(bool isWithStrinikingDistance)
+    {
+        IsWithStrinikingDistance = isWithStrinikingDistance;
+    }
+
     #endregion
 }

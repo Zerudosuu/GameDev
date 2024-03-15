@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,7 +19,7 @@ public class EnemyIdleState : EnemyState
     public override void EnterState()
     {
         base.EnterState();
-        _targetPos = GetRandomPosition();
+        _targetPos = GetRandomPointInCircle();
     }
 
     public override void ExitState()
@@ -30,13 +31,17 @@ public class EnemyIdleState : EnemyState
     {
         base.FrameUpdate();
 
-        _direction = (_targetPos - enemy.transform.position).normalized;
+        if (enemy.IsAggroed)
+        {
+            enemy.StateMachine.ChangeState(enemy.ChaseState);
+        }
 
+        _direction = (_targetPos - enemy.transform.position).normalized;
         enemy.MoveEnemy(_direction * enemy.RandomMovementSpeed);
 
         if ((enemy.transform.position - _targetPos).sqrMagnitude < 0.01f)
         {
-            _targetPos = GetRandomPosition();
+            _targetPos = GetRandomPointInCircle();
         }
     }
 
@@ -45,7 +50,7 @@ public class EnemyIdleState : EnemyState
         base.PhysicsUpdate();
     }
 
-    private Vector3 GetRandomPosition()
+    private Vector3 GetRandomPointInCircle()
     {
         return enemy.transform.position
             + (Vector3)UnityEngine.Random.insideUnitCircle * enemy.RandomMovementRange;
