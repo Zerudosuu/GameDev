@@ -4,54 +4,36 @@ using UnityEngine;
 
 public class EnemyChaseState : EnemyState
 {
-    private Transform _playerTransform;
-
-    private float _MovementSpeed = 1.75f;
-
     public EnemyChaseState(Enemy enemy, EnemyStateMachine enemyStateMachine)
-        : base(enemy, enemyStateMachine)
-    {
-        _playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
-    }
+        : base(enemy, enemyStateMachine) { }
 
     public override void AnimationTriggerEvent(Enemy.AnimationTriggerType triggerType)
     {
         base.AnimationTriggerEvent(triggerType);
+        enemy.EnemyChaseBaseInstance.DoAnimationTriggerEventLogic(triggerType);
     }
 
     public override void EnterState()
     {
         base.EnterState();
-
-        Debug.Log("Chase State");
+        enemy.EnemyChaseBaseInstance.DoEnterLogic();
     }
 
     public override void ExitState()
     {
         base.ExitState();
+        enemy.EnemyChaseBaseInstance.DoExitLogic();
     }
 
     public override void FrameUpdate()
     {
         base.FrameUpdate();
-
-        Vector2 moveDirection = (_playerTransform.position - enemy.transform.position).normalized;
-
-        enemy.MoveEnemy(moveDirection * _MovementSpeed);
-
-        if (enemy.IsWithStrinikingDistance)
-        {
-            enemy.StateMachine.ChangeState(enemy.AttackState);
-        }
-
-        if (!enemy.IsAggroed)
-        {
-            enemy.StateMachine.ChangeState(enemy.IdleState);
-        }
+        enemy.EnemyChaseBaseInstance.DoFrameUpdateLogic();
     }
 
     public override void PhysicsUpdate()
     {
         base.PhysicsUpdate();
+        enemy.EnemyChaseBaseInstance.DoPhysicsUpdateLogic();
     }
 }

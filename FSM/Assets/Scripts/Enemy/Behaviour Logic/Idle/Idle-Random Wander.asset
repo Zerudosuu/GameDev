@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2b1cd9a0cc4c924b807ec988e4350ca, type: 3}
+  m_Name: Idle-Random Wander
+  m_EditorClassIdentifier: 
+  RandomMovementRange: 5
+  RandomMovementSpeed: 1
+  PA: {fileID: 159751564799006623, guid: 3ffcbe2739b0a624ea1e1f780690c422, type: 3}
+  PB: {fileID: 239920319311196981, guid: d2cc14981e96844429e9e9562ed177d4, type: 3}
+  _waiting: 0
+  _waitTimer: 0
