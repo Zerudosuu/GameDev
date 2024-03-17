@@ -6,9 +6,9 @@ public class IdleBehaviour : StateMachineBehaviour
 {
     private AgrroTrigger agrroTrigger;
 
-    private EnemyMovement enemymovement;
+    public EnemyMovement enemymovement;
 
-    private Vector3 targetPos;
+    public Vector3 targetPos;
     public bool waiting;
     public float waitTimer;
     private Rigidbody2D RB;
@@ -53,39 +53,18 @@ public class IdleBehaviour : StateMachineBehaviour
             animator.SetBool("isChasing", false);
         }
 
-        if (waiting)
+        Vector3 direction = (targetPos - animator.transform.position).normalized;
+        RB.velocity = direction * RandomMovementSpeed;
+
+        if ((animator.transform.position - targetPos).sqrMagnitude < 0.01f)
         {
-            Debug.Log("waiting.. now.");
+            // Start waiting
 
-            waitTimer -= Time.deltaTime;
-            // animator.SetBool("isWaiting", true);
-            Debug.Log(waitTimer);
+            waiting = true;
 
-            if (waitTimer <= 0f)
-            {
-                waiting = false; // Reset waiting to false here
-                targetPos = GetRandomPointBetween(
-                    enemymovement.PA.position,
-                    enemymovement.PB.position
-                );
+            waitTimer = 3f;
 
-                // Set isWaiting to false after waiting
-            }
-        }
-        else
-        {
-            Vector3 direction = (targetPos - animator.transform.position).normalized;
-            RB.velocity = direction * RandomMovementSpeed;
-
-            if ((animator.transform.position - targetPos).sqrMagnitude < 0.01f)
-            {
-                Debug.Log("waiting...");
-                // Start waiting
-
-                waiting = true;
-
-                waitTimer = Random.Range(1f, 3f); // Wait for a random time between 1 and 3 seconds at the current target position
-            }
+            animator.SetBool("isWaiting", true); // Wait for a random time between 1 and 3 seconds at the current target position
         }
 
         if (horizontal > 0 && isFacingRight == false)
@@ -104,7 +83,7 @@ public class IdleBehaviour : StateMachineBehaviour
         isFacingRight = !isFacingRight;
     }
 
-    private Vector3 GetRandomPointBetween(Vector3 pointA, Vector3 pointB)
+    public Vector3 GetRandomPointBetween(Vector3 pointA, Vector3 pointB)
     {
         float randomX = Random.Range(pointA.x, pointB.x);
         float randomY = Random.Range(pointA.y, pointB.y);
