@@ -154,4 +154,9 @@ public class PlayerMovement : MonoBehaviour
     //     // Destroy the game object after the animation has played
     //     animator.SetBool("wasHit", false);
     // }
+
+    private void OnParticleCollision(GameObject other)
+    {
+        Debug.Log("Player was hit!");
+    }
 }
