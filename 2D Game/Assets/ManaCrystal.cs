@@ -9,6 +9,10 @@ public class ManaCrystal : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
             Mana mana = other.gameObject.GetComponent<Mana>();
+            if (mana.currentMana >= 100)
+            {
+                mana.currentMana = 100;
+            }
             mana.currentMana += 5;
 
             mana.UpdateManaBar();

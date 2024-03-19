@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour
 
     public GameObject OptionMenu;
 
+    private Animator animator;
+
     private bool isOptionMenu = false;
 
     void Start()
@@ -20,6 +22,7 @@ public class GameManager : MonoBehaviour
         preGameWarning.SetActive(false);
         OptionMenu.SetActive(false);
 
+        animator = OptionMenu.GetComponent<Animator>();
         StartCoroutine(WaitForEnterKey());
     }
 
@@ -50,7 +53,6 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         GameOverUI.SetActive(true);
-        Time.timeScale = 0;
     }
 
     public void tryAgain()
@@ -78,10 +80,21 @@ public class GameManager : MonoBehaviour
             else
             {
                 OptionMenu.SetActive(true);
+                animator.Play("PauseAnimation");
+                StartCoroutine(PauseAfterAnimation());
                 isOptionMenu = true;
                 Time.timeScale = 0;
             }
         }
+    }
+
+    private IEnumerator PauseAfterAnimation()
+    {
+        // Wait for the duration of the animation
+        yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length);
+
+        // Pause the game
+        Time.timeScale = 0;
     }
 
     public void Resume()

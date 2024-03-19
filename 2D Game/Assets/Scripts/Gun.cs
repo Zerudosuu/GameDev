@@ -1,4 +1,5 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 
 public class Gun : MonoBehaviour
@@ -28,26 +29,52 @@ public class Gun : MonoBehaviour
     private Animator animator;
     private Mana mana;
 
+    public TextMeshProUGUI chargingText;
+
+    public float chargedBulletCooldown = 5f; // Cooldown duration for the charged bullet
+    private float cooldownTimer = 0f; // Timer to track cooldown progress
+
     void Start()
     {
         animator = GetComponent<Animator>();
         mana = GetComponent<Mana>();
+
+        chargingText.text = "";
     }
 
     void Update()
     {
-        if (Input.GetMouseButton(0) && chargeTime < 5 && mana.currentMana >= chargedBulletManaCost)
+        if (cooldownTimer > 0)
+        {
+            cooldownTimer -= Time.deltaTime;
+            if (cooldownTimer <= 0)
+            {
+                cooldownTimer = 0;
+                chargingText.text = ""; // Clear the cooldown message when cooldown ends
+            }
+        }
+
+        if (
+            Input.GetMouseButton(0)
+            && chargeTime < 5
+            && mana.currentMana >= chargedBulletManaCost
+            && cooldownTimer <= 0
+        )
         {
             isCharging = true;
+            chargeTime += Time.deltaTime * chargeSpeed;
 
-            if (isCharging)
+            chargingText.text = "Charging " + chargeTime.ToString("F2") + "s"; // Display the current charge time
+
+            if (chargeTime > 5)
             {
-                chargeTime += Time.deltaTime * chargeSpeed;
+                chargingText.text = "Release to Fire!";
             }
         }
 
         if (Input.GetMouseButtonDown(0))
         {
+            chargingText.text = "";
             animator.SetBool("isAttacking", true);
             chargeTime = 0;
         }
@@ -55,6 +82,7 @@ public class Gun : MonoBehaviour
             Input.GetMouseButtonUp(0)
             && chargeTime >= 2
             && mana.currentMana >= chargedBulletManaCost
+            && cooldownTimer <= 0
         )
         {
             ReleaseCharge();
@@ -63,6 +91,8 @@ public class Gun : MonoBehaviour
 
     void ReleaseCharge()
     {
+        chargingText.text = "cooldown...";
+
         Instantiate(chargedProjectile, firepoint.position, firepoint.rotation);
         isCharging = false;
 
@@ -70,6 +100,7 @@ public class Gun : MonoBehaviour
         mana.ReduceMana(chargedBulletManaCost);
 
         chargeTime = 0;
+        cooldownTimer = chargedBulletCooldown; // Start cooldown timer
     }
 
     public void Shoot()

@@ -6,6 +6,7 @@ TagManager:
   tags:
   - EnemyContainer
   - Ground
+  - Firerain
   layers:
   - Default
   - TransparentFX
