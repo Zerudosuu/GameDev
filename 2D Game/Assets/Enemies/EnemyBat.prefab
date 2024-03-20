@@ -211,6 +211,7 @@ MonoBehaviour:
   rb: {fileID: 654542617618807193}
   isDeadClip: {fileID: 7400000, guid: 33a2478c9a1b9764c9bda61b1524539e, type: 2}
   wasHit: {fileID: 7400000, guid: 4849eb0cfdb8c6542a661bbc8b6e86da, type: 2}
+  Damage: 1
 --- !u!50 &654542617618807193
 Rigidbody2D:
   serializedVersion: 4
@@ -251,7 +252,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthBar: {fileID: 3577853790089282212}
-  maxHealth: 6
+  maxHealth: 2
   currentHealth: 0
 --- !u!1001 &543364321305614792
 PrefabInstance:

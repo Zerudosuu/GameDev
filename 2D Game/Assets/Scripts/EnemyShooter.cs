@@ -33,6 +33,8 @@ public class EnemyShooter : MonoBehaviour
     public AnimationClip isDeadClip;
     public AnimationClip wasHit;
 
+    public int Damage;
+
     #endregion
 
     void Start()
@@ -123,7 +125,7 @@ public class EnemyShooter : MonoBehaviour
         {
             Health enemyHealth = GetComponent<Health>();
             if (enemyHealth != null)
-                enemyHealth.TakeDamage(1);
+                enemyHealth.TakeDamage(Damage);
 
             // Apply knockback force
             Knockback(trig);

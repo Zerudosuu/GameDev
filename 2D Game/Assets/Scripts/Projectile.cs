@@ -15,6 +15,8 @@ public class Projectile : MonoBehaviour
 
     public bool washit = false;
 
+    public GameObject boomprefab;
+
     void Start()
     {
         rb.velocity = transform.right * speed;
@@ -25,5 +27,13 @@ public class Projectile : MonoBehaviour
     void DestroyProjectile()
     {
         Destroy(gameObject);
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Enemy"))
+        {
+            Instantiate(boomprefab, transform.position, transform.rotation);
+        }
     }
 }

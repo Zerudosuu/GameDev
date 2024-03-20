@@ -130,6 +130,7 @@ MonoBehaviour:
   rb: {fileID: 8259469066708649692}
   lifetime: 1
   washit: 0
+  boomprefab: {fileID: 117871771993108807, guid: f37cfc6938bb7d74ba945251c7d43ba3, type: 3}
 --- !u!58 &-3654948698603888774
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -159,7 +160,7 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}

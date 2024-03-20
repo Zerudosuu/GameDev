@@ -221,7 +221,6 @@ MonoBehaviour:
   attackPoint2: {fileID: 0}
   mainTargetPosition: {fileID: 0}
   willAttack: 0
-  speed: 2
   rb: {fileID: 0}
   isDeadClip: {fileID: 7400000, guid: 8d81008223712594784985d1ccd99761, type: 2}
   wasHit: {fileID: 7400000, guid: 046462ba40405ec4da37eba53b74081d, type: 2}
@@ -240,7 +239,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthBar: {fileID: 4427037873515509902}
-  maxHealth: 5
+  maxHealth: 4
   currentHealth: 0
 --- !u!1 &6784032850238828852
 GameObject:

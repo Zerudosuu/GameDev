@@ -15,10 +15,14 @@ public class EnemyAttack : MonoBehaviour
 
     public int damage;
 
+    private Animator mainCameraAnimator;
+
     void Start()
     {
         animator = GetComponent<Animator>();
         enemy = FindObjectOfType<enemyMove>();
+        Camera mainCamera = Camera.main;
+        mainCameraAnimator = mainCamera.GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -51,9 +55,11 @@ public class EnemyAttack : MonoBehaviour
         {
             if (target.CompareTag("Tower"))
             {
+                mainCameraAnimator.Play(0);
                 Health towerHealth = target.GetComponent<Health>(); // get the health scriptsa tower
                 if (towerHealth != null) // if may health script na nakua
-                    towerHealth.TakeDamage(damage); // call the takeDamage method sa health script kang tower
+                    towerHealth.TakeDamage(damage);
+                // call the takeDamage method sa health script kang tower
                 GameManager gameManager = FindAnyObjectByType<GameManager>();
 
                 if (gameManager != null)

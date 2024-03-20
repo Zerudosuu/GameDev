@@ -30,9 +30,14 @@ public class PlayerMovement : MonoBehaviour
     public AnimationClip isDeadClip;
     public AnimationClip wasHit;
 
+    public GameObject playerprefab;
+
+    public int LimitFps;
+
     void Start()
     {
         animator = GetComponent<Animator>();
+        Application.targetFrameRate = LimitFps;
     }
 
     void Update()
@@ -95,6 +100,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (isDashing)
         {
+            Instantiate(playerprefab, transform.position, transform.rotation);
             return;
         }
         rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);

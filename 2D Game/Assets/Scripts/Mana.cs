@@ -8,7 +8,7 @@ public class Mana : MonoBehaviour
 {
     public Slider ManaBar;
     public int MaxMana;
-    public int currentMana;
+    public float currentMana;
 
     public TextMeshProUGUI CurrentManaText;
 
@@ -21,7 +21,7 @@ public class Mana : MonoBehaviour
         CurrentManaText.text = currentMana.ToString() + "/100";
     }
 
-    public void ReduceMana(int reduceMana)
+    public void ReduceMana(float reduceMana)
     {
         currentMana -= reduceMana;
         currentMana = Mathf.Clamp(currentMana, 0, MaxMana); // Ensure mana doesn't go below 0 or exceed MaxMana
@@ -32,6 +32,6 @@ public class Mana : MonoBehaviour
     {
         ManaBar.value = currentMana;
 
-        CurrentManaText.text = currentMana.ToString() + "/100";
+        CurrentManaText.text = currentMana.ToString("00") + "/100";
     }
 }
