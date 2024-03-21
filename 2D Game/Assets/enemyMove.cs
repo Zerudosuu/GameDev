@@ -122,6 +122,11 @@ public class enemyMove : MonoBehaviour
                 StartCoroutine(DestroyWithAnimation());
             }
         }
+
+        if (trig.gameObject.CompareTag("Barracade"))
+        {
+            KnockbackBarricade(trig);
+        }
     }
 
     void OnTriggerStay2D(Collider2D other)
@@ -160,6 +165,20 @@ public class enemyMove : MonoBehaviour
             DropManaCrystal();
         }
         Destroy(gameObject);
+    }
+
+    public void KnockbackBarricade(Collider2D trig)
+    {
+        Vector3 direction = (transform.position - trig.transform.position).normalized;
+
+        if (isFacingRight)
+        {
+            transform.Translate(trig.transform.right * 2);
+        }
+        else if (!isFacingRight)
+        {
+            transform.Translate(-trig.transform.right * 2);
+        }
     }
 
     public void Knockback(Collider2D trig)

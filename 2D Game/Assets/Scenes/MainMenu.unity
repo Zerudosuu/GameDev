@@ -157,7 +157,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1003.71, y: -594.79}
+  m_AnchoredPosition: {x: -999.91, y: -594.79}
   m_SizeDelta: {x: 1026.85, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &25491496
@@ -180,7 +180,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Press A to move to the Left and D to the Right
+  m_text: Press  D to  move to the Right
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -24743,7 +24743,7 @@ Tilemap:
     m_Data: {r: 1, g: 1, b: 1, a: 1}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0.6037346, b: 0.19339621, a: 1}
   m_Origin: {x: -45, y: -5, z: 0}
   m_Size: {x: 130, y: 19, z: 1}
   m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
@@ -24924,7 +24924,7 @@ AudioSource:
   m_PlayOnAwake: 1
   m_Volume: 0.078
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -25174,7 +25174,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -981.91, y: -605.7}
+  m_AnchoredPosition: {x: -998.44, y: -603.8}
   m_SizeDelta: {x: 1026.85, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &504929854
@@ -25197,7 +25197,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Check the tower ... ==>>>>>
+  m_text: To the Tower ======>>
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -25260,7 +25260,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: 0, z: -78.54578, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -26274,6 +26274,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1143983336}
   - component: {fileID: 1143983337}
+  - component: {fileID: 1143983338}
   m_Layer: 0
   m_Name: GameObject (2)
   m_TagString: Untagged
@@ -26348,6 +26349,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &1143983338
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1143983335}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 1935a0b4c4d5f734081e706bf70cdd4e, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1260815006
 GameObject:
   m_ObjectHideFlags: 0
@@ -39396,7 +39418,7 @@ Tilemap:
     m_Data: {r: 1, g: 1, b: 1, a: 1}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.9528302, g: 0.759546, b: 0.09438412, a: 1}
   m_Origin: {x: -22, y: -45, z: 0}
   m_Size: {x: 171, y: 45, z: 1}
   m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
@@ -39790,7 +39812,7 @@ Transform:
   m_GameObject: {fileID: 1689318397}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -22.186293, y: 2.4335396, z: -10}
+  m_LocalPosition: {x: -22.175364, y: 2.43353, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

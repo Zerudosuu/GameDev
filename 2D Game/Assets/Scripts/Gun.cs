@@ -34,7 +34,6 @@ public class Gun : MonoBehaviour
     public float chargedBulletCooldown = 5f; // Cooldown duration for the charged bullet
     private float cooldownTimer = 0f; // Timer to track cooldown progress
     public AudioSource audioSourceSlingshot;
-    public AudioSource audioSourceBlast;
 
     void Start()
     {
@@ -66,13 +65,16 @@ public class Gun : MonoBehaviour
             isCharging = true;
             chargeTime += Time.deltaTime * chargeSpeed;
 
-            chargingText.text = "Charging " + chargeTime.ToString("F2") + "s"; // Display the current charge time
-
-            if (chargeTime >= 2)
+            if (chargeTime <= 1)
             {
-                audioSourceBlast.Play();
+                chargingText.text = "";
             }
-            if (chargeTime > 5)
+            else
+            {
+                chargingText.text = "Charging " + chargeTime.ToString("F2") + "s"; // Display the current charge time
+            }
+
+            if (chargeTime >= 5)
             {
                 chargingText.text = "Release to Fire!";
             }
@@ -86,12 +88,11 @@ public class Gun : MonoBehaviour
         }
         else if (
             Input.GetMouseButtonUp(0)
-            && chargeTime >= 2
+            && chargeTime >= 5
             && mana.currentMana >= chargedBulletManaCost
             && cooldownTimer <= 0
         )
         {
-            audioSourceBlast.Stop();
             ReleaseCharge();
         }
     }

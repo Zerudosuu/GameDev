@@ -14,6 +14,8 @@ TagManager:
   - FlyingAttackPoint
   - ChargedBullet
   - Canvas
+  - Barracade
+  - BarricadeContainer
   layers:
   - Default
   - TransparentFX

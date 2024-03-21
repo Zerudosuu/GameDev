@@ -1,4 +1,6 @@
 using System.Collections;
+using System.Data.Common;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -32,12 +34,29 @@ public class PlayerMovement : MonoBehaviour
 
     public GameObject playerprefab;
 
-    public int LimitFps;
+    public int LimitFps = 60;
+
+    public float manaReductionAmount = 1f;
+    public Animator BarricadeAnimator;
+
+    private bool isOpen = false;
+
+    private Mana mana;
+
+    private Health pHealth;
+
+    public float healAmount = 20f;
 
     void Start()
     {
         animator = GetComponent<Animator>();
         Application.targetFrameRate = LimitFps;
+        BarricadeAnimator = GameObject
+            .FindGameObjectWithTag("BarricadeContainer")
+            .GetComponent<Animator>();
+
+        mana = gameObject.GetComponent<Mana>();
+        pHealth = gameObject.GetComponent<Health>();
     }
 
     void Update()
@@ -93,6 +112,46 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetMouseButtonDown(1) && canDash)
         {
             StartCoroutine(Dash());
+        }
+
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            if (isOpen)
+            {
+                BarricadeAnimator.SetBool("isBarricadeOn", false);
+                isOpen = false;
+            }
+            else
+            {
+                BarricadeAnimator.SetBool("isBarricadeOn", true);
+                isOpen = true;
+            }
+        }
+
+        if (isOpen)
+        {
+            mana.ReduceMana(manaReductionAmount * Time.deltaTime);
+        }
+
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            Heal();
+        }
+    }
+
+    private void Heal()
+    {
+        Debug.Log("Healed");
+        // Check if there's enough mana to exchange for health
+        if (mana.currentMana >= healAmount && pHealth.currentHealth != pHealth.maxHealth)
+        {
+            // Increase player's health and decrease mana
+            pHealth.currentHealth += healAmount;
+            pHealth.healthBar.value = pHealth.currentHealth;
+            mana.ReduceMana(healAmount);
+
+            // Ensure player's health doesn't exceed max health
+            pHealth.currentHealth = Mathf.Min(pHealth.currentHealth, pHealth.maxHealth);
         }
     }
 

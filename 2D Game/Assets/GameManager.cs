@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviour
 
     private bool isOptionMenu = false;
 
+    private Mana mana;
+
     void Start()
     {
         Instruction.SetActive(true);
@@ -24,6 +26,8 @@ public class GameManager : MonoBehaviour
 
         animator = OptionMenu.GetComponent<Animator>();
         StartCoroutine(WaitForEnterKey());
+        Cursor.visible = false;
+        mana = GameObject.FindGameObjectWithTag("Player").GetComponent<Mana>();
     }
 
     private IEnumerator WaitForEnterKey()
@@ -39,6 +43,8 @@ public class GameManager : MonoBehaviour
 
     public void PressEnterToStart()
     {
+        mana.currentMana = mana.MaxMana;
+        mana.UpdateManaBar();
         Instruction.SetActive(false);
         preGameWarning.SetActive(true); // Activate preGameWarning
         Invoke("WarningOff", 2);
@@ -53,6 +59,7 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         GameOverUI.SetActive(true);
+        Cursor.visible = true;
     }
 
     public void tryAgain()
@@ -73,12 +80,14 @@ public class GameManager : MonoBehaviour
         {
             if (isOptionMenu)
             {
+                Cursor.visible = false;
                 OptionMenu.SetActive(false);
                 isOptionMenu = false;
                 Time.timeScale = 1;
             }
             else
             {
+                Cursor.visible = true;
                 OptionMenu.SetActive(true);
                 animator.Play("PauseAnimation");
                 StartCoroutine(PauseAfterAnimation());

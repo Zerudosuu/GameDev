@@ -39,6 +39,7 @@ public class WalkScript : MonoBehaviour
         }
         else
         {
+            rb.velocity = Vector2.zero;
             animator.SetBool("isMoving", false);
         }
     }

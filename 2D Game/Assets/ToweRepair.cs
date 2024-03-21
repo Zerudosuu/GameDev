@@ -6,11 +6,11 @@ using UnityEngine;
 public class ToweRepair : MonoBehaviour
 {
     public float repairRate = 5f; // Rate at which the tower is repaired per second
-    public KeyCode repairKey = KeyCode.R; // Key to initiate repairs
+    public KeyCode repairKey = KeyCode.E; // Key to initiate repairs
 
     private bool isRepairing = false;
     private Health towerHealth;
-    public Mana mana;
+    public Health PlayerHealth;
 
     public TextMeshProUGUI text;
 
@@ -26,7 +26,7 @@ public class ToweRepair : MonoBehaviour
         if (
             Input.GetKey(repairKey)
             && towerHealth.currentHealth < towerHealth.maxHealth
-            && mana.currentMana > 0
+            && PlayerHealth.currentHealth > 0
         )
         {
             isRepairing = true;
@@ -47,7 +47,7 @@ public class ToweRepair : MonoBehaviour
             }
             else if (towerHealth.currentHealth <= towerHealth.maxHealth)
             {
-                text.text = "Hold R to Repair";
+                text.text = "Hold E to Repair";
             }
 
             Debug.Log("REPAIRING...");
@@ -73,12 +73,14 @@ public class ToweRepair : MonoBehaviour
 
     void RepairTower()
     {
-        if (towerHealth != null && mana != null)
+        if (towerHealth != null && PlayerHealth != null)
         {
-            if (mana.currentMana >= 1)
+            if (PlayerHealth.currentHealth >= 1)
             {
-                // Reduce one mana per tower health repaired
-                mana.ReduceMana(0.1f);
+                // Deduct health from the player to repair the tower
+                PlayerHealth.currentHealth -= repairRate * Time.deltaTime;
+                PlayerHealth.currentHealth = Mathf.Max(PlayerHealth.currentHealth, 0f); // Ensure player health doesn't go below zero
+                PlayerHealth.healthBar.value = PlayerHealth.currentHealth;
 
                 // Repair the tower
                 towerHealth.currentHealth += repairRate * Time.deltaTime;
