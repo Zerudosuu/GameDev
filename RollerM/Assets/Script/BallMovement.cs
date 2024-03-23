@@ -1,70 +1,90 @@
 using UnityEngine;
 
-public class MoveNoho : MonoBehaviour
+public class CarAcceleration : MonoBehaviour
 {
-    private float horizontal;
-    private float vertical;
-    private float speed = 4f;
-    private float jump = 8f;
-    private float accel = 2f;
-    private float accellimit = 20f;
-    private bool acceldone;
-
-    [SerializeField]
+    public float acceleration = 5f; // Acceleration rate
+    public float maxSpeed = 10f; // Maximum speed
+    public float jumpForce = 10f; // Force applied when jumping
     private Rigidbody rb;
 
     [SerializeField]
-    private LayerMask groundLayer;
+    private float currentSpeed; // Variable to track speed
+
+    [SerializeField]
+    private Transform cameraTransform;
+
+    private bool IsGrounded()
+    {
+        RaycastHit hit;
+        float distanceToGround = GetComponent<Collider>().bounds.extents.y;
+
+        bool grounded = Physics.Raycast(
+            transform.position,
+            -Vector3.up,
+            out hit,
+            distanceToGround + 0.1f
+        );
+
+        // Draw the ray in the Scene view
+        Color rayColor = grounded ? Color.green : Color.red;
+        Debug.DrawRay(transform.position, -Vector3.up * (distanceToGround + 0.1f), rayColor);
+
+        return grounded;
+    }
 
     void Start()
     {
-        acceldone = false;
+        rb = GetComponent<Rigidbody>();
     }
 
     void Update()
     {
-        horizontal = Input.GetAxis("Horizontal");
-        vertical = Input.GetAxis("Vertical");
-
+        // Check for jump input
         if (Input.GetButtonDown("Jump") && IsGrounded())
         {
-            rb.velocity = new Vector3(rb.velocity.x, jump, rb.velocity.z);
-        }
-
-        if (Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
-        {
-            rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y * 0.5f, rb.velocity.z);
-        }
-
-        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D))
-        {
-            speed += 5 * Time.deltaTime;
-        }
-        else
-        {
-            speed = 4;
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }
     }
 
-    private void FixedUpdate()
+    void FixedUpdate()
     {
-        rb.velocity = new Vector3(
-            horizontal * speed * accel,
-            rb.velocity.y,
-            vertical * speed * accel
-        );
-    }
+        float moveHorizontal = Input.GetAxis("Horizontal");
+        float moveVertical = Input.GetAxis("Vertical");
 
-    private bool IsGrounded()
-    {
-        return Physics.Raycast(transform.position, -Vector3.up, 0.2f, groundLayer);
-    }
+        // Calculate movement direction based on camera forward and right vectors
+        Vector3 cameraForward = cameraTransform.forward;
+        Vector3 cameraRight = cameraTransform.right;
+        cameraForward.y = 0; // Ensure no vertical component
+        cameraRight.y = 0; // Ensure no vertical component
+        Vector3 movement =
+            (cameraForward.normalized * moveVertical) + (cameraRight.normalized * moveHorizontal);
 
-    private void OnCollisionStay(Collision other)
-    {
-        if (other.gameObject.layer == groundLayer)
+        // Apply acceleration only if grounded
+        if (IsGrounded() && movement.magnitude > 0)
         {
-            IsGrounded();
+            rb.AddForce(movement * acceleration);
         }
+
+        // Limit maximum speed
+        if (rb.velocity.magnitude > maxSpeed)
+        {
+            rb.velocity = rb.velocity.normalized * maxSpeed;
+        }
+
+        // Rotate the object based on horizontal input
+        transform.Rotate(Vector3.up, moveHorizontal * Time.deltaTime * 100);
+
+        // Camera follows the character's facing direction
+        if (cameraTransform != null)
+        {
+            cameraTransform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
+        }
+
+        currentSpeed = rb.velocity.magnitude;
+    }
+
+    private void OnApplicationFocus(bool focus)
+    {
+        Cursor.lockState = focus ? CursorLockMode.Locked : CursorLockMode.None;
     }
 }
