@@ -1,70 +1,125 @@
 using UnityEngine;
 
-public class ProjectileShooter : MonoBehaviour
+public class PlayerMovement : MonoBehaviour
 {
-    public GameObject projectilePrefab;
-    public float minForce = 10f;
-    public float maxForce = 50f;
-    public float maxChargeTime = 2.0f;
+    [SerializeField]
+    private LineRenderer lineRenderer;
 
-    private float chargeStartTime;
-    private bool charging = false;
+    private bool isIdle;
+    private bool isAimig;
 
-    void Update()
+    private Rigidbody rigidbody1;
+
+    [SerializeField]
+    private float stopVelocity = .05f;
+
+    [SerializeField]
+    private float shotPower;
+
+    private void Awake()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            StartCharging();
-        }
-        else if (Input.GetKeyUp(KeyCode.Space))
-        {
-            FireProjectile();
-        }
-        else if (charging)
-        {
-            UpdateCharge();
-        }
+        rigidbody1 = GetComponent<Rigidbody>();
+
+        isAimig = false;
+
+        lineRenderer.enabled = false;
     }
 
-    void StartCharging()
+    private void Update()
     {
-        charging = true;
-        chargeStartTime = Time.time;
+        if (rigidbody1.velocity.magnitude < stopVelocity)
+            Stop();
+
+        ProcessAim();
     }
 
-    void UpdateCharge()
+    private void Stop()
     {
-        float chargeTime = Time.time - chargeStartTime;
-        float chargeRatio = Mathf.Clamp01(chargeTime / maxChargeTime);
-        float force = Mathf.Lerp(minForce, maxForce, chargeRatio);
-        // You can visualize the charge level or do other feedback here if needed
-
-        Debug.Log("Charging: " + chargeRatio);
-
-        // You can also play charging sound, show visual feedback, etc.
+        rigidbody1.velocity = Vector3.zero;
+        rigidbody1.angularVelocity = Vector3.zero;
+        isIdle = true;
     }
 
-    void FireProjectile()
+    private void OnMouseDown()
     {
-        if (!charging)
+        if (isIdle)
+            isAimig = true;
+    }
+
+    private void ProcessAim()
+    {
+        if (!isAimig || !isIdle)
             return;
 
-        float chargeTime = Time.time - chargeStartTime;
-        float chargeRatio = Mathf.Clamp01(chargeTime / maxChargeTime);
-        float force = Mathf.Lerp(minForce, maxForce, chargeRatio);
+        Vector3? worlPoint = CastMouseClickRay();
 
-        GameObject projectile = Instantiate(
-            projectilePrefab,
-            transform.position,
-            transform.rotation
-        );
-        Rigidbody rb = projectile.GetComponent<Rigidbody>();
-        if (rb != null)
+        if (!worlPoint.HasValue)
+            return;
+
+        DrawLine(worlPoint.Value);
+
+        if (Input.GetMouseButtonUp(0))
         {
-            rb.velocity = transform.forward * force;
+            Shoot(worlPoint.Value);
         }
+    }
 
-        // Reset charging state
-        charging = false;
+    private void Shoot(Vector3 worlPoint)
+    {
+        isAimig = false;
+        lineRenderer.enabled = false;
+
+        Vector3 horizontalWorlpoint = new Vector3(worlPoint.x, transform.position.y, worlPoint.z);
+
+        Vector3 direction = horizontalWorlpoint - transform.position;
+        direction.Normalize();
+
+        float strength = Vector3.Distance(transform.position, horizontalWorlpoint);
+
+        rigidbody1.AddForce(direction * strength * shotPower);
+    }
+
+    private void DrawLine(Vector3 worlPoint)
+    {
+        Vector3[] positions = { transform.position, worlPoint };
+
+        lineRenderer.SetPositions(positions);
+        lineRenderer.enabled = true;
+    }
+
+    private Vector3? CastMouseClickRay()
+    {
+        Vector3 screenMousePosFar = new Vector3(
+            Input.mousePosition.x,
+            Input.mousePosition.y,
+            Camera.main.farClipPlane
+        );
+
+        Vector3 screenMousePosNear = new Vector3(
+            Input.mousePosition.x,
+            Input.mousePosition.y,
+            Camera.main.nearClipPlane
+        );
+
+        Vector3 worldMousePosFar = Camera.main.ScreenToWorldPoint(screenMousePosFar);
+        Vector3 worldMousePosNear = Camera.main.ScreenToWorldPoint(screenMousePosNear);
+
+        RaycastHit hit;
+
+        if (
+            Physics.Raycast(
+                worldMousePosNear,
+                worldMousePosFar - worldMousePosNear,
+                out hit,
+                float.PositiveInfinity
+            )
+        )
+        {
+            return hit.point;
+        }
+        else
+        {
+            return null;
+        }
     }
 }
