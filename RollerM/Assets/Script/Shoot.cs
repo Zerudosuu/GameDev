@@ -1,12 +1,18 @@
+using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public UnityEvent PullRecord;
+    public float jumpForce = 5f; // Adjust the jump force as needed
+    public bool isGrounded; // Flag to check if the player is grounded
+
     [SerializeField]
     private LineRenderer lineRenderer;
 
     private bool isIdle;
-    private bool isAimig;
+    private bool isAiming;
 
     private Rigidbody rigidbody1;
 
@@ -16,13 +22,28 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private float shotPower;
 
+    public Vector3 checkpointPos;
+
     private void Awake()
     {
         rigidbody1 = GetComponent<Rigidbody>();
 
-        isAimig = false;
+        isAiming = false;
 
         lineRenderer.enabled = false;
+
+        PullRecord.AddListener(
+            GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager>().Pull
+        );
+
+        PullRecord.AddListener(
+            GameObject.FindGameObjectWithTag("UIController").GetComponent<UIController>().CountPull
+        );
+    }
+
+    void Start()
+    {
+        checkpointPos = transform.position;
     }
 
     private void Update()
@@ -31,6 +52,17 @@ public class PlayerMovement : MonoBehaviour
             Stop();
 
         ProcessAim();
+
+        if (transform.position.y <= -30)
+        {
+            Die();
+        }
+
+        // Check for jump input
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        {
+            Jump();
+        }
     }
 
     private void Stop()
@@ -43,45 +75,57 @@ public class PlayerMovement : MonoBehaviour
     private void OnMouseDown()
     {
         if (isIdle)
-            isAimig = true;
+            isAiming = true;
     }
 
     private void ProcessAim()
     {
-        if (!isAimig || !isIdle)
+        if (!isAiming || !isIdle)
             return;
 
-        Vector3? worlPoint = CastMouseClickRay();
+        Vector3? worldPoint = CastMouseClickRay();
 
-        if (!worlPoint.HasValue)
+        if (!worldPoint.HasValue)
             return;
 
-        DrawLine(worlPoint.Value);
+        DrawLine(worldPoint.Value);
 
         if (Input.GetMouseButtonUp(0))
         {
-            Shoot(worlPoint.Value);
+            Shoot(worldPoint.Value);
         }
     }
 
-    private void Shoot(Vector3 worlPoint)
+    private void Shoot(Vector3 worldPoint)
     {
-        isAimig = false;
+        isAiming = false;
         lineRenderer.enabled = false;
 
-        Vector3 horizontalWorlpoint = new Vector3(worlPoint.x, transform.position.y, worlPoint.z);
+        Vector3 horizontalWorldPoint = new Vector3(
+            worldPoint.x,
+            transform.position.y,
+            worldPoint.z
+        );
 
-        Vector3 direction = horizontalWorlpoint - transform.position;
+        Vector3 direction = horizontalWorldPoint - transform.position;
         direction.Normalize();
 
-        float strength = Vector3.Distance(transform.position, horizontalWorlpoint);
+        float strength = Vector3.Distance(transform.position, horizontalWorldPoint);
 
         rigidbody1.AddForce(direction * strength * shotPower);
+
+        PullRecord.Invoke();
     }
 
-    private void DrawLine(Vector3 worlPoint)
+    private void Jump()
     {
-        Vector3[] positions = { transform.position, worlPoint };
+        rigidbody1.velocity = new Vector3(rigidbody1.velocity.x, 0f, rigidbody1.velocity.z);
+        rigidbody1.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+    }
+
+    private void DrawLine(Vector3 worldPoint)
+    {
+        Vector3[] positions = { transform.position, worldPoint };
 
         lineRenderer.SetPositions(positions);
         lineRenderer.enabled = true;
@@ -120,6 +164,40 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             return null;
+        }
+    }
+
+    void Die()
+    {
+        StartCoroutine(Respawn(0.5f));
+    }
+
+    IEnumerator Respawn(float duration)
+    {
+        yield return new WaitForSeconds(duration);
+        rigidbody1.velocity = Vector2.zero;
+        transform.position = checkpointPos;
+    }
+
+    public void UpdateCheckpoint(Vector3 position)
+    {
+        checkpointPos = position;
+    }
+
+    // Check if the player is grounded
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isGrounded = true;
+        }
+    }
+
+    void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isGrounded = false;
         }
     }
 }
