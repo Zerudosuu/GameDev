@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -14,6 +15,8 @@ public class PlayerMovement : MonoBehaviour
     private bool isIdle;
     private bool isAiming;
 
+    // Flag to indicate whether the game has started
+
     private Rigidbody rigidbody1;
 
     [SerializeField]
@@ -23,6 +26,10 @@ public class PlayerMovement : MonoBehaviour
     private float shotPower;
 
     public Vector3 checkpointPos;
+
+    CanvasIntoManager canvas;
+
+    public bool started = false;
 
     private void Awake()
     {
@@ -39,6 +46,8 @@ public class PlayerMovement : MonoBehaviour
         PullRecord.AddListener(
             GameObject.FindGameObjectWithTag("UIController").GetComponent<UIController>().CountPull
         );
+
+        canvas = GameObject.FindGameObjectWithTag("UIController").GetComponent<CanvasIntoManager>();
     }
 
     void Start()
@@ -53,17 +62,19 @@ public class PlayerMovement : MonoBehaviour
 
         ProcessAim();
 
-        if (transform.position.y <= -30)
+        if (Input.GetKey(KeyCode.R))
         {
             Die();
         }
 
-        // Check for jump input
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
-        {
-            Jump();
-        }
+        // if (canvas.gameStarted)
+        // {
+        //     started = canvas.gameStarted;
+        //     print("game starsts!!");
+        // }
     }
+
+    // Method to start the game
 
     private void Stop()
     {
@@ -74,25 +85,54 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (isIdle)
+        if (isIdle && canvas.gameStarted)
             isAiming = true;
     }
 
     private void ProcessAim()
     {
-        if (!isAiming || !isIdle)
+        if (!isIdle || !canvas.gameStarted)
             return;
 
-        Vector3? worldPoint = CastMouseClickRay();
-
-        if (!worldPoint.HasValue)
-            return;
-
-        DrawLine(worldPoint.Value);
-
-        if (Input.GetMouseButtonUp(0))
+        if (Input.GetMouseButtonDown(0))
         {
-            Shoot(worldPoint.Value);
+            RaycastHit[] hits;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+            hits = Physics.RaycastAll(ray);
+
+            foreach (RaycastHit hit in hits)
+            {
+                Debug.Log("Hit object: " + hit.collider.gameObject.name);
+            }
+
+            if (hits.Length > 0)
+            {
+                // Assuming you only want to aim if the player is hit by the raycast
+                foreach (RaycastHit hit in hits)
+                {
+                    if (hit.collider.gameObject == gameObject)
+                    {
+                        isAiming = true;
+                        break; // Exit the loop once the player is found
+                    }
+                }
+            }
+        }
+
+        if (isAiming)
+        {
+            Vector3? worldPoint = CastMouseClickRay();
+
+            if (!worldPoint.HasValue)
+                return;
+
+            DrawLine(worldPoint.Value);
+
+            if (Input.GetMouseButtonUp(0))
+            {
+                Shoot(worldPoint.Value);
+            }
         }
     }
 
@@ -167,7 +207,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    void Die()
+    public void Die()
     {
         StartCoroutine(Respawn(0.5f));
     }

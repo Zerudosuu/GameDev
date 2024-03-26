@@ -53,4 +53,12 @@ public class UpDownPlatform : MonoBehaviour
             yield return null;
         }
     }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            other.transform.parent = transform.parent;
+        }
+    }
 }
