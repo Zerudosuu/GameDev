@@ -3,11 +3,33 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public static PlayerMovement instance;
     private float horizontal;
-    private float speed = 10f;
-    private float jumpingPower = 24f;
-    private bool isFacingRight = true;
+    private float currentSpeed = 0f;
 
+    [Header("Movement")]
+    public float acceleration; // Adjust this value to control acceleration rate
+    public float maxSpeed; // Maximum normal speed of the player
+    public float sprintSpeed; // Speed when sprinting
+    public float jumpingPower;
+
+    [Space(10)]
+    [Header("Check"),]
+    private bool isFacingRight = true;
+    private bool jump;
+    private bool grounded;
+    private bool wasGrounded = true;
+
+    private bool canShoot = false;
+
+    public bool isAttacking = false;
+
+    public bool isinMelleRange = false;
+
+    public bool isRange;
+
+    [Space(10)]
+    [Header("Rigidbody")]
     [SerializeField]
     private Rigidbody2D rb;
 
@@ -17,68 +39,175 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private LayerMask groundLayer;
 
+    [SerializeField]
+    public Animator animator;
+
+    [SerializeField]
+    private Transform spawnArrow;
+
+    [Space(10)]
     [Header("DashingProperty")]
     public bool canDash = true;
     private bool isDashing;
-    private float dashingPower = 30f;
-
+    public float dashingPower = 30f;
     private float dashingTime = 0.2f;
     private float dashingCooldown = 1f;
 
-    void Start() { }
+    [Space(10)]
+    [Header("RayCast")]
+    public float raycastDistance = 5f;
+    public LayerMask layerMask;
+
+    [Space(20)]
+    [Header("Character")]
+    CharacterHander characters;
+    public Rigidbody2D arrow;
+
+    public float TimeRemaining = .40f;
+
+    MeleeScript meleeScript;
+
+    void Awake()
+    {
+        instance = this;
+    }
+
+    void Start()
+    {
+        meleeScript = GetComponentInChildren<MeleeScript>();
+        characters = GetComponent<CharacterHander>();
+        characters.UpdateCharacter();
+    }
 
     void Update()
     {
-        if (isDashing)
-        {
-            return;
-        }
+        isinMelleRange = meleeScript.canAttack;
 
         horizontal = Input.GetAxisRaw("Horizontal");
+        jump = Input.GetButtonDown("Jump");
 
-        if (Input.GetButtonDown("Jump") && IsGrounded())
+        // Set animation parameters
+        animator.SetFloat("Speed", Mathf.Abs(currentSpeed));
+        animator.SetBool("Grounded", grounded);
+        animator.SetBool("Falling", !grounded && rb.velocity.y < 0f);
+
+        Vector2 raycastDirection = isFacingRight ? Vector2.right : Vector2.left;
+
+        // Cast a ray in the appropriate direction from the raycast origin
+        RaycastHit2D hit = Physics2D.Raycast(
+            transform.position,
+            raycastDirection,
+            raycastDistance,
+            layerMask
+        );
+
+        // Draw the ray in the scene view for visualization purposes
+        Debug.DrawRay(transform.position, raycastDirection * raycastDistance, Color.green);
+
+        // Check if the ray hit something
+        if (hit.collider != null)
+        {
+            // Handle the collision
+            Debug.Log("Raycast hit: " + hit.collider.gameObject.name);
+            canShoot = true;
+            print(canShoot);
+        }
+
+        if (isDashing)
+            return;
+
+        if (jump && grounded)
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
+            animator.SetBool("Jump", true);
+            grounded = false;
         }
 
-        if (Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
+        if (grounded)
         {
-            rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
+            animator.SetBool("Jump", false);
+        }
+        if (Input.GetKey(KeyCode.LeftShift) && horizontal != 0)
+        {
+            currentSpeed = sprintSpeed * Mathf.Sign(horizontal);
+        }
+        else
+        {
+            currentSpeed = maxSpeed * horizontal;
         }
 
-        if (horizontal > 0 && isFacingRight == false)
-        {
+        if (horizontal > 0 && !isFacingRight || horizontal < 0 && isFacingRight)
             Flip();
-        }
-        else if (horizontal < 0 && isFacingRight == true)
-        {
-            Flip();
-        }
 
         if (Input.GetMouseButtonDown(1) && canDash)
-        {
             StartCoroutine(Dash());
+
+        if (TimeRemaining > 0)
+        {
+            TimeRemaining -= Time.deltaTime; // Decrease the time remaining
         }
+
+        if (Input.GetMouseButtonDown(0) && isRange && canShoot && TimeRemaining <= 0)
+        {
+            animator.SetBool("ShootingArrow", true);
+            StartCoroutine(ShootAndResetTimer());
+        }
+        else if (Input.GetMouseButton(0) && isinMelleRange && !isAttacking)
+        {
+            Attack();
+        }
+    }
+
+    IEnumerator ShootAndResetTimer()
+    {
+        // Wait for the duration of the shooting animation
+        yield return new WaitForSeconds(.40f); // Adjust shootingAnimationDuration as needed
+        Shoot();
+        canShoot = false;
+        // Set shootingArrow back to false after the animation duration
+        animator.SetBool("ShootingArrow", false);
+
+        // Reset the time remaining to the interval after shooting
+        TimeRemaining = 0.40f;
+        canShoot = true;
+    }
+
+    private void Shoot()
+    {
+        Instantiate(arrow, spawnArrow.position, spawnArrow.rotation);
+    }
+
+    private void Attack()
+    {
+        isAttacking = true;
     }
 
     private void FixedUpdate()
     {
         if (isDashing)
-        {
             return;
-        }
-        rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
-    }
 
-    private bool IsGrounded()
-    {
-        return Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
+        grounded = Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
+
+        // If the player was previously grounded and now isn't, it means the player is falling
+        if (wasGrounded && !grounded)
+            animator.SetBool("Falling", true);
+
+        wasGrounded = grounded;
+
+        currentSpeed = Mathf.MoveTowards(
+            currentSpeed,
+            horizontal * maxSpeed,
+            acceleration * Time.fixedDeltaTime
+        );
+
+        rb.velocity = new Vector2(currentSpeed, rb.velocity.y);
     }
 
     private void Flip()
     {
-        transform.Rotate(0f, 180f, 0f);
         isFacingRight = !isFacingRight;
+        transform.Rotate(Vector3.up, 180f);
     }
 
     private IEnumerator Dash()
@@ -89,9 +218,7 @@ public class PlayerMovement : MonoBehaviour
         float originalGravity = rb.gravityScale;
         rb.gravityScale = 0f;
 
-        // Determine the dash direction based on the player's facing direction
         int dashDirection = isFacingRight ? 1 : -1;
-
         rb.velocity = new Vector2(dashDirection * dashingPower, 0f);
 
         yield return new WaitForSeconds(dashingTime);
@@ -158,5 +285,13 @@ public class PlayerMovement : MonoBehaviour
     private void OnParticleCollision(GameObject other)
     {
         Debug.Log("Player was hit!");
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Enemy"))
+        {
+            isinMelleRange = true;
+        }
     }
 }

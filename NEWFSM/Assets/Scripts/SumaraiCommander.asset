@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3e5336f40b7e114f821d6ed5843c9b4, type: 3}
+  m_Name: SumaraiCommander
+  m_EditorClassIdentifier: 
+  sprite: {fileID: 117123495, guid: 92e4bdf83d805c74ead5b008954dcd1d, type: 3}
+  characterName: SamuraiCommander
+  health: 200
+  attackDamage: 100
+  isRange: 0
+  sprintSpeed: 7
+  maxSpeed: 3
+  JumpingPower: 10
+  Range: 5
+  animatorController: {fileID: 9100000, guid: a29380cad5c947e40be246a8ac1baffb, type: 2}
