@@ -5,10 +5,19 @@ using UnityEngine;
 public class transitionOneScript : StateMachineBehaviour
 {
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
-    //override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    //{
-    //
-    //}
+
+    private CharacterHander characterHander;
+
+    public override void OnStateEnter(
+        Animator animator,
+        AnimatorStateInfo stateInfo,
+        int layerIndex
+    )
+    {
+        characterHander = GameObject
+            .FindGameObjectWithTag("Player")
+            .GetComponentInParent<CharacterHander>();
+    }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(
@@ -17,9 +26,17 @@ public class transitionOneScript : StateMachineBehaviour
         int layerIndex
     )
     {
-        if (PlayerMovement.instance.isAttacking)
+        if (PlayerMovement.instance.isAttacking && characterHander.currentIndex == 0)
         {
             PlayerMovement.instance.animator.Play("SamuraiArcherAttack2");
+        }
+        else if (PlayerMovement.instance.isAttacking && characterHander.currentIndex == 1)
+        {
+            PlayerMovement.instance.animator.Play("SamuraiAttackTwo");
+        }
+        else if (PlayerMovement.instance.isAttacking && characterHander.currentIndex == 2)
+        {
+            PlayerMovement.instance.animator.Play("SamuraiCommanderAttackTwo");
         }
     }
 
@@ -27,6 +44,7 @@ public class transitionOneScript : StateMachineBehaviour
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         PlayerMovement.instance.isAttacking = false;
+        PlayerMovement.instance.canShoot = true;
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

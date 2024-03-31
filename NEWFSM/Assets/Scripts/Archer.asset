@@ -15,10 +15,11 @@ MonoBehaviour:
   sprite: {fileID: -1517339540, guid: 234856c4eb4e40641a73a70ac4bd45bb, type: 3}
   characterName: Archer
   health: 50
-  attackDamage: 30
+  attackDamage: 10
   isRange: 1
   sprintSpeed: 6
   maxSpeed: 3
-  JumpingPower: 20
+  JumpingPower: 17
   Range: 15
+  DashingPower: 20
   animatorController: {fileID: 9100000, guid: 59fe0af1f9e750f4888a430dc4c91712, type: 2}

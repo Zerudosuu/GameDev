@@ -18,5 +18,7 @@ public class CharacterData : ScriptableObject
 
     public float Range;
 
+    public float DashingPower;
+
     public AnimatorController animatorController;
 }

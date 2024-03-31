@@ -13,6 +13,10 @@ public class PlayerMovement : MonoBehaviour
     public float sprintSpeed; // Speed when sprinting
     public float jumpingPower;
 
+    public int Damage;
+
+    public int healthpoints;
+
     [Space(10)]
     [Header("Check"),]
     private bool isFacingRight = true;
@@ -20,13 +24,18 @@ public class PlayerMovement : MonoBehaviour
     private bool grounded;
     private bool wasGrounded = true;
 
-    private bool canShoot = false;
+    public bool canShoot = false;
 
     public bool isAttacking = false;
 
     public bool isinMelleRange = false;
 
     public bool isRange;
+
+    [Header("AttackRange")]
+    public GameObject AttackPoint;
+    public float radius;
+    public LayerMask mainTarget;
 
     [Space(10)]
     [Header("Rigidbody")]
@@ -83,6 +92,11 @@ public class PlayerMovement : MonoBehaviour
     {
         isinMelleRange = meleeScript.canAttack;
 
+        if (isinMelleRange)
+        {
+            canShoot = false;
+        }
+
         horizontal = Input.GetAxisRaw("Horizontal");
         jump = Input.GetButtonDown("Jump");
 
@@ -111,6 +125,10 @@ public class PlayerMovement : MonoBehaviour
             Debug.Log("Raycast hit: " + hit.collider.gameObject.name);
             canShoot = true;
             print(canShoot);
+        }
+        else
+        {
+            canShoot = false;
         }
 
         if (isDashing)
@@ -147,12 +165,19 @@ public class PlayerMovement : MonoBehaviour
             TimeRemaining -= Time.deltaTime; // Decrease the time remaining
         }
 
-        if (Input.GetMouseButtonDown(0) && isRange && canShoot && TimeRemaining <= 0)
+        if (
+            Input.GetMouseButtonDown(0)
+            && isRange
+            && canShoot
+            && TimeRemaining <= 0
+            && !isinMelleRange
+        )
         {
             animator.SetBool("ShootingArrow", true);
             StartCoroutine(ShootAndResetTimer());
         }
-        else if (Input.GetMouseButton(0) && isinMelleRange && !isAttacking)
+
+        if (Input.GetMouseButton(0) && isinMelleRange && !isAttacking)
         {
             Attack();
         }
@@ -180,6 +205,28 @@ public class PlayerMovement : MonoBehaviour
     private void Attack()
     {
         isAttacking = true;
+    }
+
+    public void AttackTrigger()
+    {
+        Collider2D[] targets = Physics2D.OverlapCircleAll(
+            AttackPoint.transform.position,
+            radius,
+            mainTarget
+        );
+
+        foreach (Collider2D target in targets)
+        {
+            if (target.CompareTag("Enemy"))
+            {
+                target.GetComponent<Health>().TakeDamage(Damage);
+            }
+        }
+    }
+
+    void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(AttackPoint.transform.position, radius);
     }
 
     private void FixedUpdate()

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -32,8 +33,11 @@ public class EnemyShooterMovement : MonoBehaviour
 
     private bool isFacingRight = true;
 
+    AgrroTrigger agrroTrigger;
+
     void Start()
     {
+        agrroTrigger = GetComponentInChildren<AgrroTrigger>();
         rb = GetComponent<Rigidbody2D>();
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
     }

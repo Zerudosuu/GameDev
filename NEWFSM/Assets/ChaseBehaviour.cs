@@ -11,6 +11,10 @@ public class ChaseBehaviour : StateMachineBehaviour
     [SerializeField]
     private float MovementSpeed = 5f;
 
+    private float horizontal;
+
+    public bool isFacingRight = true;
+
     public override void OnStateEnter(
         Animator animator,
         AnimatorStateInfo stateInfo,
@@ -43,6 +47,23 @@ public class ChaseBehaviour : StateMachineBehaviour
         Vector2 moveDirection = (Player.position - animator.transform.position).normalized;
 
         RB.velocity = moveDirection * MovementSpeed;
+
+        horizontal = RB.velocity.x;
+
+        if (horizontal < 0 && isFacingRight == true)
+        {
+            Flip(animator);
+        }
+        else if (horizontal > 0 && isFacingRight == false)
+        {
+            Flip(animator);
+        }
+    }
+
+    private void Flip(Animator animator)
+    {
+        animator.transform.Rotate(0f, 180f, 0f);
+        isFacingRight = !isFacingRight;
     }
 
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

@@ -5,9 +5,11 @@ using UnityEngine;
 public class CharacterHander : MonoBehaviour
 {
     public CharacterData[] Characters;
+
+    [SerializeField]
     private Animator animator;
     private SpriteRenderer spriteRenderer;
-    private int currentIndex = 0;
+    public int currentIndex = 0;
 
     PlayerMovement playerMovement;
 
@@ -53,6 +55,9 @@ public class CharacterHander : MonoBehaviour
             playerMovement.jumpingPower = Characters[currentIndex].JumpingPower;
             playerMovement.raycastDistance = Characters[currentIndex].Range;
             playerMovement.isRange = Characters[currentIndex].isRange;
+            playerMovement.dashingPower = Characters[currentIndex].DashingPower;
+            playerMovement.Damage = Characters[currentIndex].attackDamage;
+            playerMovement.healthpoints = Characters[currentIndex].health;
             // Update other player variables as needed
         }
     }

@@ -7,6 +7,12 @@ public class WaitBehaviour : StateMachineBehaviour
     private IdleBehaviour idleBehaviour;
     private AgrroTrigger agrroTrigger;
 
+    private float horizontal;
+
+    public bool isFacingRight = true;
+
+    private Rigidbody2D rb;
+
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(
         Animator animator,
@@ -14,6 +20,7 @@ public class WaitBehaviour : StateMachineBehaviour
         int layerIndex
     )
     {
+        rb = animator.GetComponent<Rigidbody2D>();
         idleBehaviour = animator.GetBehaviour<IdleBehaviour>();
         agrroTrigger = animator.gameObject.GetComponentInChildren<AgrroTrigger>();
     }
@@ -25,6 +32,7 @@ public class WaitBehaviour : StateMachineBehaviour
         int layerIndex
     )
     {
+        horizontal = rb.velocity.x;
         if (idleBehaviour.waiting)
         {
             animator.SetBool("isWaiting", true);
@@ -54,7 +62,18 @@ public class WaitBehaviour : StateMachineBehaviour
         if (agrroTrigger.isAggroed)
         {
             animator.SetBool("isChasing", true);
+
+            if (idleBehaviour.isFacingRight)
+            {
+                idleBehaviour.Flip(animator); // Flip if facing right
+            }
         }
+    }
+
+    private void Flip(Animator animator)
+    {
+        animator.transform.Rotate(0f, 180f, 0f);
+        isFacingRight = !isFacingRight;
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state

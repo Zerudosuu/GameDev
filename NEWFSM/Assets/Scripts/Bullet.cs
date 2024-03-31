@@ -26,10 +26,22 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag("Enemy"))
+        Health health = other.GetComponent<Health>();
+
+        if (health != null)
         {
-            print("Enemyhit");
+            health.TakeDamage(10);
+
+            if (health.currentHealth <= 0)
+            {
+                if (other.transform.parent != null)
+                {
+                    Destroy(other.transform.parent.gameObject);
+                }
+            }
+
             Destroy(gameObject);
+            // Check if the parent exists before destroying it
         }
     }
 }

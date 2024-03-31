@@ -15,9 +15,9 @@ public class IdleBehaviour : StateMachineBehaviour
 
     public float RandomMovementSpeed = 2;
 
-    private float horizontal;
+    public float horizontal;
 
-    private bool isFacingRight = true;
+    public bool isFacingRight = true;
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(
@@ -77,7 +77,7 @@ public class IdleBehaviour : StateMachineBehaviour
         }
     }
 
-    private void Flip(Animator animator)
+    public void Flip(Animator animator)
     {
         animator.transform.Rotate(0f, 180f, 0f);
         isFacingRight = !isFacingRight;

@@ -15,10 +15,11 @@ MonoBehaviour:
   sprite: {fileID: 117123495, guid: 92e4bdf83d805c74ead5b008954dcd1d, type: 3}
   characterName: SamuraiCommander
   health: 200
-  attackDamage: 100
+  attackDamage: 60
   isRange: 0
   sprintSpeed: 7
   maxSpeed: 3
-  JumpingPower: 10
+  JumpingPower: 15
   Range: 5
+  DashingPower: 10
   animatorController: {fileID: 9100000, guid: a29380cad5c947e40be246a8ac1baffb, type: 2}
