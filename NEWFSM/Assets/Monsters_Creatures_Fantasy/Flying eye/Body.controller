@@ -321,3 +321,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MovementSpeed: 5
   isFacingRight: 1
+  RandomMovementSpeed: 10
+  targetPos: {x: 0, y: 0, z: 0}

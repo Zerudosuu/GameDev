@@ -7,6 +7,7 @@ public class BossIdleBehaviour : StateMachineBehaviour
     private Transform playerLoc;
     private float timeRemaining;
 
+    private bool hasDecided;
     private int Decision;
 
     public override void OnStateEnter(
@@ -16,7 +17,8 @@ public class BossIdleBehaviour : StateMachineBehaviour
     )
     {
         playerLoc = GameObject.FindGameObjectWithTag("Player").transform;
-        Decision = Random.Range(1, 2);
+        timeRemaining = 2f;
+        hasDecided = false;
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -26,6 +28,13 @@ public class BossIdleBehaviour : StateMachineBehaviour
         int layerIndex
     )
     {
+        timeRemaining -= Time.deltaTime;
+        if (!hasDecided && timeRemaining <= 0)
+        {
+            DecisionRandom();
+            hasDecided = true;
+        }
+
         if (Decision == 1)
         {
             animator.SetBool("isMoving", true);
@@ -36,8 +45,12 @@ public class BossIdleBehaviour : StateMachineBehaviour
         }
     }
 
-    // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
-    override public void OnStateExit(
+    public void DecisionRandom()
+    {
+        Decision = Random.Range(1, 2);
+    }
+
+    public override void OnStateExit(
         Animator animator,
         AnimatorStateInfo stateInfo,
         int layerIndex

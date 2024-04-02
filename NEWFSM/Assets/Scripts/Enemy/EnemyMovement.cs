@@ -41,7 +41,11 @@ public class EnemyMovement : MonoBehaviour
         {
             if (target.CompareTag("Player"))
             {
-                Debug.Log("Player was hit!");
+                CharacterHander CharHander = target.GetComponent<CharacterHander>();
+                PlayerHealth playerHealth = target.GetComponent<PlayerHealth>();
+
+                CharHander.IncrementDamageTaken(3);
+                playerHealth.TakeDamage(3);
             }
         }
     }

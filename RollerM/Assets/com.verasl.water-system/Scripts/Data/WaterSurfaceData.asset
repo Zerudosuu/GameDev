@@ -124,7 +124,7 @@ MonoBehaviour:
     direction: 13
     wavelength: 8
   _foamSettings:
-    foamType: 1
+    foamType: 2
     basicFoam:
       serializedVersion: 2
       m_Curve:

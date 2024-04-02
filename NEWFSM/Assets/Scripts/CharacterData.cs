@@ -20,5 +20,15 @@ public class CharacterData : ScriptableObject
 
     public float DashingPower;
 
+    public int DamageTaken;
+
     public AnimatorController animatorController;
+
+    public void ResetDamageTaken()
+    {
+        DamageTaken = 0;
+        isDead = false;
+    }
+
+    public bool isDead;
 }

@@ -15,9 +15,13 @@ public class BulletPrefab : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            Debug.Log("Player was hit!");
+            CharacterHander CharHander = other.GetComponent<CharacterHander>();
 
-            GameObject.Instantiate(Blast, transform.position, Quaternion.identity);
+            PlayerHealth playerHealth = other.GetComponent<PlayerHealth>();
+
+            CharHander.IncrementDamageTaken(2);
+            playerHealth.TakeDamage(2);
+
             Destroy(gameObject);
         }
     }

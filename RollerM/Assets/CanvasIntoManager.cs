@@ -7,10 +7,15 @@ public class CanvasIntoManager : MonoBehaviour
     public GameObject CoinCount;
     public GameObject Title;
     public GameObject subtitle;
+
+    public GameObject instruction;
     public bool gameStarted = false;
+
+    PlayerMovement playerMovement;
 
     void Start()
     {
+        playerMovement = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
         // Check if the current scene is the second or third scene in the build
         int sceneIndex = SceneManager.GetActiveScene().buildIndex;
         if (sceneIndex == 1 || sceneIndex == 2) // Assuming scene indices start from 0
@@ -23,6 +28,7 @@ public class CanvasIntoManager : MonoBehaviour
             // Disable Title and subtitle
             Title.SetActive(false);
             subtitle.SetActive(false);
+            instruction.SetActive(false);
         }
         else
         {
@@ -37,11 +43,11 @@ public class CanvasIntoManager : MonoBehaviour
     void Update()
     {
         // Check if the player clicks the screen
-        if (Input.GetKeyDown(KeyCode.P))
+        if (playerMovement.started)
         {
             gameStarted = true;
             print("Game has started");
-
+            instruction.SetActive(false);
             pullcount.SetActive(true);
             CoinCount.SetActive(true);
         }

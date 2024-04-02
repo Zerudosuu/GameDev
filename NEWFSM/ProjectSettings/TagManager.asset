@@ -9,6 +9,7 @@ TagManager:
   - Firerain
   - Enemy
   - Bullet
+  - UIController
   layers:
   - Default
   - TransparentFX

@@ -26,13 +26,15 @@ public class UIController : MonoBehaviour
         coins = GameObject.FindGameObjectsWithTag("Coin");
         CoinCount = coins.Length;
 
-        scoreText.text = "Coins to Collect " + gameManager.score.ToString() + "/" + CoinCount;
+        scoreText.text =
+            "Box(Answers) to Collect " + gameManager.score.ToString() + "/" + CoinCount;
     }
 
     // Update is called once per frame
     public void UpdateScore()
     {
-        scoreText.text = "Coins to Collect " + gameManager.score.ToString() + "/" + CoinCount;
+        scoreText.text =
+            "Box(Answers) to Collect " + gameManager.score.ToString() + "/" + CoinCount;
     }
 
     public void CountPull()

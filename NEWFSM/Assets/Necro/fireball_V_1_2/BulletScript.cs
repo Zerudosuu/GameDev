@@ -22,7 +22,7 @@ public class BulletScript : MonoBehaviour
             Flip();
         }
 
-        Invoke("Lifeline", 1);
+        Invoke("Lifeline", 5);
     }
 
     // Update is called once per frame
@@ -37,5 +37,21 @@ public class BulletScript : MonoBehaviour
     void Lifeline()
     {
         Destroy(gameObject);
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            CharacterHander CharHander = other.GetComponent<CharacterHander>();
+            PlayerMovement playerMovement = other.GetComponent<PlayerMovement>();
+            PlayerHealth playerHealth = other.GetComponent<PlayerHealth>();
+
+            CharHander.IncrementDamageTaken(5);
+            CharHander.UpdateDamage();
+            playerHealth.TakeDamage(5);
+
+            print("Player was hit by the fireball");
+        }
     }
 }

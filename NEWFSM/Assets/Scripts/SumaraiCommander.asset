@@ -17,9 +17,10 @@ MonoBehaviour:
   health: 200
   attackDamage: 60
   isRange: 0
-  sprintSpeed: 7
-  maxSpeed: 3
+  sprintSpeed: 4
+  maxSpeed: 2
   JumpingPower: 15
   Range: 5
   DashingPower: 10
+  DamageTaken: 0
   animatorController: {fileID: 9100000, guid: a29380cad5c947e40be246a8ac1baffb, type: 2}

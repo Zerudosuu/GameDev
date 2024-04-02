@@ -13,8 +13,11 @@ public class Bullet : MonoBehaviour
     [SerializeField]
     private float lifetime;
 
+    UiManager uiManager;
+
     void Start()
     {
+        uiManager = GameObject.FindGameObjectWithTag("UIController").GetComponent<UiManager>();
         rb.velocity = transform.right * speed;
         Invoke(nameof(DestroyProjectile), lifetime);
     }
@@ -36,12 +39,20 @@ public class Bullet : MonoBehaviour
             {
                 if (other.transform.parent != null)
                 {
+                    uiManager.EnemyCount--;
+                    uiManager.UpdateEnemyCount();
                     Destroy(other.transform.parent.gameObject);
                 }
             }
 
             Destroy(gameObject);
             // Check if the parent exists before destroying it
+        }
+
+        if (other.GetComponent<BossScript>() != null)
+        {
+            BossScript bossScript = other.GetComponent<BossScript>();
+            bossScript.AddRage(2);
         }
     }
 }

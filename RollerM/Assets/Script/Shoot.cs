@@ -85,13 +85,13 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (isIdle && canvas.gameStarted)
+        if (isIdle)
             isAiming = true;
     }
 
     private void ProcessAim()
     {
-        if (!isIdle || !canvas.gameStarted)
+        if (!isIdle)
             return;
 
         if (Input.GetMouseButtonDown(0))
@@ -138,6 +138,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Shoot(Vector3 worldPoint)
     {
+        started = true;
         isAiming = false;
         lineRenderer.enabled = false;
 

@@ -13,9 +13,11 @@ public class PlayerMovement : MonoBehaviour
     public float sprintSpeed; // Speed when sprinting
     public float jumpingPower;
 
-    public int Damage;
+    public int HealthPoints;
 
-    public int healthpoints;
+    public int DamageTaken;
+
+    public int Damage;
 
     [Space(10)]
     [Header("Check"),]
@@ -31,6 +33,8 @@ public class PlayerMovement : MonoBehaviour
     public bool isinMelleRange = false;
 
     public bool isRange;
+
+    public bool isDead;
 
     [Header("AttackRange")]
     public GameObject AttackPoint;
@@ -76,6 +80,8 @@ public class PlayerMovement : MonoBehaviour
 
     MeleeScript meleeScript;
 
+    UiManager uiManager;
+
     void Awake()
     {
         instance = this;
@@ -83,6 +89,8 @@ public class PlayerMovement : MonoBehaviour
 
     void Start()
     {
+        uiManager = GameObject.FindGameObjectWithTag("UIController").GetComponent<UiManager>();
+        uiManager.UpdateEnemyCount();
         meleeScript = GetComponentInChildren<MeleeScript>();
         characters = GetComponent<CharacterHander>();
         characters.UpdateCharacter();
@@ -219,7 +227,25 @@ public class PlayerMovement : MonoBehaviour
         {
             if (target.CompareTag("Enemy"))
             {
+                AgrroTrigger agrroTrigger = target.GetComponentInChildren<AgrroTrigger>();
+
+                if (agrroTrigger != null)
+                {
+                    agrroTrigger.isAggroed = true;
+                }
+
                 target.GetComponent<Health>().TakeDamage(Damage);
+                if (target.GetComponent<Health>().currentHealth <= 0)
+                {
+                    uiManager.EnemyCount--;
+                    uiManager.UpdateEnemyCount();
+                }
+
+                if (target.GetComponent<BossScript>() != null)
+                {
+                    BossScript bossScript = target.GetComponent<BossScript>();
+                    bossScript.AddRage(5);
+                }
             }
         }
     }
@@ -331,7 +357,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnParticleCollision(GameObject other)
     {
-        Debug.Log("Player was hit!");
+        PlayerHealth playerHealth = gameObject.GetComponent<PlayerHealth>();
+        characters.IncrementDamageTaken(2);
+        playerHealth.TakeDamage(2);
     }
 
     private void OnTriggerEnter2D(Collider2D other)

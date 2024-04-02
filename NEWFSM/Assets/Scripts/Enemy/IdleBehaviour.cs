@@ -19,6 +19,8 @@ public class IdleBehaviour : StateMachineBehaviour
 
     public bool isFacingRight = true;
 
+    private Transform Player;
+
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(
         Animator animator,
@@ -35,6 +37,8 @@ public class IdleBehaviour : StateMachineBehaviour
         waiting = false;
 
         RB = animator.gameObject.GetComponent<Rigidbody2D>();
+
+        Player = GameObject.FindGameObjectWithTag("Player").transform;
     }
 
     public override void OnStateUpdate(
@@ -47,24 +51,47 @@ public class IdleBehaviour : StateMachineBehaviour
         if (agrroTrigger.isAggroed)
         {
             animator.SetBool("isChasing", true);
+            if (Player.transform.position.x < animator.transform.position.x && isFacingRight)
+            {
+                Flip(animator);
+            }
+            else if (Player.transform.position.x > animator.transform.position.x && !isFacingRight)
+            {
+                Flip(animator);
+            }
         }
         else
         {
             animator.SetBool("isChasing", false);
         }
-
-        Vector3 direction = (targetPos - animator.transform.position).normalized;
-        RB.velocity = direction * RandomMovementSpeed;
-
-        if ((animator.transform.position - targetPos).sqrMagnitude < 0.01f)
+        if (waiting)
         {
-            // Start waiting
+            RB.velocity = Vector2.zero;
+            waitTimer -= Time.deltaTime;
 
-            waiting = true;
+            if (waitTimer <= 0f)
+            {
+                waiting = false; // Reset waiting to false here
+                // animator.Play("Idle");
+                targetPos = GetRandomPointBetween(
+                    enemymovement.PA.position,
+                    enemymovement.PB.position
+                );
+            }
+        }
+        else
+        {
+            Vector3 direction = (targetPos - animator.transform.position).normalized;
+            RB.velocity = direction * RandomMovementSpeed;
+            if ((animator.transform.position - targetPos).sqrMagnitude < 0.01f)
+            {
+                // Start waiting
 
-            waitTimer = 3f;
+                waiting = true;
+                // animator.Play("Stop");
 
-            animator.SetBool("isWaiting", true); // Wait for a random time between 1 and 3 seconds at the current target position
+                waitTimer = 3f;
+            }
         }
 
         if (horizontal > 0 && isFacingRight == false)

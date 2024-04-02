@@ -19,7 +19,8 @@ MonoBehaviour:
   isRange: 0
   sprintSpeed: 8
   maxSpeed: 4
-  JumpingPower: 20
+  JumpingPower: 18
   Range: 7
   DashingPower: 30
+  DamageTaken: 0
   animatorController: {fileID: 9100000, guid: 0f6024cdf6c7fd244addc665340ab738, type: 2}

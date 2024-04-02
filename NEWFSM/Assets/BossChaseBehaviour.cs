@@ -15,6 +15,8 @@ public class BossChaseBehaviour : StateMachineBehaviour
 
     private float horizontal;
 
+    BossScript bossScript;
+
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(
         Animator animator,
@@ -22,6 +24,7 @@ public class BossChaseBehaviour : StateMachineBehaviour
         int layerIndex
     )
     {
+        bossScript = animator.GetComponent<BossScript>();
         playerPosition = GameObject.FindGameObjectWithTag("Player").transform;
         attackTrigger = animator.gameObject.GetComponentInChildren<AttackTrigger>();
         RB = animator.GetComponent<Rigidbody2D>();
@@ -38,6 +41,14 @@ public class BossChaseBehaviour : StateMachineBehaviour
         int layerIndex
     )
     {
+        if (bossScript.RagePoint >= 100)
+        {
+            animator.SetBool("Ulting", true);
+            RB.velocity = Vector2.zero;
+            bossScript.RagePoint = 0;
+            bossScript.rageSlider.value = bossScript.RagePoint;
+        }
+
         horizontal = RB.velocity.x;
         if (Decision == 1)
         {

@@ -14,6 +14,8 @@ public class ChaseBehaviour : StateMachineBehaviour
     private float horizontal;
 
     public bool isFacingRight = true;
+    public float RandomMovementSpeed = 5f;
+    public Vector3 targetPos;
 
     public override void OnStateEnter(
         Animator animator,
@@ -33,6 +35,7 @@ public class ChaseBehaviour : StateMachineBehaviour
         int layerIndex
     )
     {
+        horizontal = RB.velocity.x;
         if (!agrroTrigger.isAggroed)
         {
             animator.SetBool("isChasing", false);
@@ -44,20 +47,8 @@ public class ChaseBehaviour : StateMachineBehaviour
             animator.SetBool("isAttacking", true);
         }
 
-        Vector2 moveDirection = (Player.position - animator.transform.position).normalized;
-
-        RB.velocity = moveDirection * MovementSpeed;
-
-        horizontal = RB.velocity.x;
-
-        if (horizontal < 0 && isFacingRight == true)
-        {
-            Flip(animator);
-        }
-        else if (horizontal > 0 && isFacingRight == false)
-        {
-            Flip(animator);
-        }
+        Vector3 direction = (Player.transform.position - animator.transform.position).normalized;
+        RB.velocity = direction * RandomMovementSpeed;
     }
 
     private void Flip(Animator animator)
