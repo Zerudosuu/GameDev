@@ -1,5 +1,4 @@
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -14,8 +13,6 @@ public class PlayerMovement : MonoBehaviour
 
     private bool isIdle;
     private bool isAiming;
-
-    // Flag to indicate whether the game has started
 
     private Rigidbody rigidbody1;
 
@@ -60,7 +57,7 @@ public class PlayerMovement : MonoBehaviour
         if (rigidbody1.velocity.magnitude < stopVelocity)
             Stop();
 
-        ProcessAim();
+        ProcessInput();
 
         if (Input.GetKey(KeyCode.R))
         {
@@ -73,8 +70,6 @@ public class PlayerMovement : MonoBehaviour
         //     print("game starsts!!");
         // }
     }
-
-    // Method to start the game
 
     private void Stop()
     {
@@ -89,11 +84,12 @@ public class PlayerMovement : MonoBehaviour
             isAiming = true;
     }
 
-    private void ProcessAim()
+    private void ProcessInput()
     {
         if (!isIdle)
             return;
 
+        // Handle mouse input
         if (Input.GetMouseButtonDown(0))
         {
             RaycastHit[] hits;
@@ -120,16 +116,55 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
+        // Handle touch input
+        if (Input.touchCount > 0)
+        {
+            Touch touch = Input.GetTouch(0);
+
+            if (touch.phase == TouchPhase.Began)
+            {
+                RaycastHit[] hits;
+                Ray ray = Camera.main.ScreenPointToRay(touch.position);
+
+                hits = Physics.RaycastAll(ray);
+
+                foreach (RaycastHit hit in hits)
+                {
+                    Debug.Log("Hit object: " + hit.collider.gameObject.name);
+                }
+
+                if (hits.Length > 0)
+                {
+                    // Assuming you only want to aim if the player is hit by the raycast
+                    foreach (RaycastHit hit in hits)
+                    {
+                        if (hit.collider.gameObject == gameObject)
+                        {
+                            isAiming = true;
+                            break; // Exit the loop once the player is found
+                        }
+                    }
+                }
+            }
+        }
+
         if (isAiming)
         {
-            Vector3? worldPoint = CastMouseClickRay();
+            Vector3? worldPoint = CastInputRay();
 
             if (!worldPoint.HasValue)
                 return;
 
             DrawLine(worldPoint.Value);
 
+            // Handle mouse input
             if (Input.GetMouseButtonUp(0))
+            {
+                Shoot(worldPoint.Value);
+            }
+
+            // Handle touch input
+            if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended)
             {
                 Shoot(worldPoint.Value);
             }
@@ -172,29 +207,41 @@ public class PlayerMovement : MonoBehaviour
         lineRenderer.enabled = true;
     }
 
-    private Vector3? CastMouseClickRay()
+    private Vector3? CastInputRay()
     {
-        Vector3 screenMousePosFar = new Vector3(
-            Input.mousePosition.x,
-            Input.mousePosition.y,
+        Vector3 inputPosition;
+
+        // Check for mouse or touch input
+        if (Input.touchCount > 0)
+        {
+            inputPosition = Input.GetTouch(0).position;
+        }
+        else
+        {
+            inputPosition = Input.mousePosition;
+        }
+
+        Vector3 screenInputPosFar = new Vector3(
+            inputPosition.x,
+            inputPosition.y,
             Camera.main.farClipPlane
         );
 
-        Vector3 screenMousePosNear = new Vector3(
-            Input.mousePosition.x,
-            Input.mousePosition.y,
+        Vector3 screenInputPosNear = new Vector3(
+            inputPosition.x,
+            inputPosition.y,
             Camera.main.nearClipPlane
         );
 
-        Vector3 worldMousePosFar = Camera.main.ScreenToWorldPoint(screenMousePosFar);
-        Vector3 worldMousePosNear = Camera.main.ScreenToWorldPoint(screenMousePosNear);
+        Vector3 worldInputPosFar = Camera.main.ScreenToWorldPoint(screenInputPosFar);
+        Vector3 worldInputPosNear = Camera.main.ScreenToWorldPoint(screenInputPosNear);
 
         RaycastHit hit;
 
         if (
             Physics.Raycast(
-                worldMousePosNear,
-                worldMousePosFar - worldMousePosNear,
+                worldInputPosNear,
+                worldInputPosFar - worldInputPosNear,
                 out hit,
                 float.PositiveInfinity
             )
