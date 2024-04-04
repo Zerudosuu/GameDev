@@ -131,6 +131,11 @@ public class PlayerMovement : MonoBehaviour
         if (isOpen)
         {
             mana.ReduceMana(manaReductionAmount * Time.deltaTime);
+            if (mana.currentMana <= 0)
+            {
+                BarricadeAnimator.SetBool("isBarricadeOn", false);
+                isOpen = false;
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.LeftShift))
