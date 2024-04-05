@@ -43,4 +43,11 @@ public class GameManager : MonoBehaviour
     {
         Application.Quit();
     }
+
+    public void PlayerDie()
+    {
+        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        // Load the next scene
+        SceneManager.LoadScene(currentSceneIndex);
+    }
 }
