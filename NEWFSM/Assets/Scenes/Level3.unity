@@ -2250,6 +2250,10 @@ PrefabInstance:
       propertyPath: healthBar
       value: 
       objectReference: {fileID: 480406178}
+    - target: {fileID: 2511421285392597581, guid: be3ad9be3d66aab4e81dcee7a4c3a2dd, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 4468238038118295226, guid: be3ad9be3d66aab4e81dcee7a4c3a2dd, type: 3}
       propertyPath: m_LocalPosition.x
       value: -6.5

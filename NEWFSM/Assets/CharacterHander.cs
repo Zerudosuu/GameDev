@@ -107,6 +107,7 @@ public class CharacterHander : MonoBehaviour
         // Update player variables based on the current character
         if (playerMovement != null)
         {
+            playerMovement.NameCharacter = Characters[currentIndex].name;
             playerMovement.maxSpeed = Characters[currentIndex].maxSpeed;
             playerMovement.sprintSpeed = Characters[currentIndex].sprintSpeed;
             playerMovement.jumpingPower = Characters[currentIndex].JumpingPower;

@@ -1,9 +1,11 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
     public static PlayerMovement instance;
+    public string NameCharacter;
     private float horizontal;
     private float currentSpeed = 0f;
 
@@ -82,6 +84,9 @@ public class PlayerMovement : MonoBehaviour
 
     UiManager uiManager;
 
+    [SerializeField]
+    private TextMeshProUGUI Charrname;
+
     void Awake()
     {
         instance = this;
@@ -94,10 +99,13 @@ public class PlayerMovement : MonoBehaviour
         meleeScript = GetComponentInChildren<MeleeScript>();
         characters = GetComponent<CharacterHander>();
         characters.UpdateCharacter();
+
+        Charrname.text = NameCharacter.ToString();
     }
 
     void Update()
     {
+        Charrname.text = NameCharacter.ToString();
         isinMelleRange = meleeScript.canAttack;
 
         if (isinMelleRange)

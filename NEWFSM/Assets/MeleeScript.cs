@@ -10,6 +10,7 @@ public class MeleeScript : MonoBehaviour
     {
         if (other.CompareTag("Enemy"))
         {
+            print("Ronald");
             canAttack = true;
         }
     }

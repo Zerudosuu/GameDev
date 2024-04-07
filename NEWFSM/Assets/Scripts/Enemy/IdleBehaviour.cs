@@ -48,22 +48,7 @@ public class IdleBehaviour : StateMachineBehaviour
     )
     {
         horizontal = RB.velocity.x;
-        if (agrroTrigger.isAggroed)
-        {
-            animator.SetBool("isChasing", true);
-            if (Player.transform.position.x < animator.transform.position.x && isFacingRight)
-            {
-                Flip(animator);
-            }
-            else if (Player.transform.position.x > animator.transform.position.x && !isFacingRight)
-            {
-                Flip(animator);
-            }
-        }
-        else
-        {
-            animator.SetBool("isChasing", false);
-        }
+
         if (waiting)
         {
             RB.velocity = Vector2.zero;
@@ -71,8 +56,6 @@ public class IdleBehaviour : StateMachineBehaviour
 
             if (waitTimer <= 0f)
             {
-                waiting = false; // Reset waiting to false here
-                // animator.Play("Idle");
                 targetPos = GetRandomPointBetween(
                     enemymovement.PA.position,
                     enemymovement.PB.position
@@ -83,22 +66,32 @@ public class IdleBehaviour : StateMachineBehaviour
         {
             Vector3 direction = (targetPos - animator.transform.position).normalized;
             RB.velocity = direction * RandomMovementSpeed;
+
             if ((animator.transform.position - targetPos).sqrMagnitude < 0.01f)
             {
                 // Start waiting
 
                 waiting = true;
-                // animator.Play("Stop");
-
+                animator.SetBool("isWaiting", true);
+                RB.velocity = Vector3.zero;
                 waitTimer = 3f;
             }
         }
 
-        if (horizontal > 0 && isFacingRight == false)
+        if (agrroTrigger.isAggroed)
+        {
+            animator.SetBool("isChasing", true);
+        }
+        else
+        {
+            animator.SetBool("isChasing", false);
+        }
+
+        if (horizontal > 0 && !isFacingRight)
         {
             Flip(animator);
         }
-        else if (horizontal < 0 && isFacingRight == true)
+        else if (horizontal < 0 && isFacingRight)
         {
             Flip(animator);
         }
