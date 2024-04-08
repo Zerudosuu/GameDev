@@ -10,11 +10,13 @@ TagManager:
   - Enemy
   - Bullet
   - UIController
+  - GameOver
+  - FlyingEnemy
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - FlyingEnemy
   - Water
   - UI
   - Ground

@@ -39,6 +39,8 @@ public class IdleBehaviour : StateMachineBehaviour
         RB = animator.gameObject.GetComponent<Rigidbody2D>();
 
         Player = GameObject.FindGameObjectWithTag("Player").transform;
+
+        Debug.Log("GO BACK");
     }
 
     public override void OnStateUpdate(

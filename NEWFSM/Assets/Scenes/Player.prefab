@@ -307,6 +307,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3b0249d26daf08479a835b7db8f3e99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  NameCharacter: 
   acceleration: 1
   maxSpeed: 2
   sprintSpeed: 5
@@ -339,6 +340,11 @@ MonoBehaviour:
     m_Bits: 256
   arrow: {fileID: 6182115560043727095, guid: 452f4eeec8be39746b941735b40b9a53, type: 3}
   TimeRemaining: 0.35
+  Charrname: {fileID: 0}
+  checkpointPos: {x: 0, y: 0, z: 0}
+  sprite: {fileID: 0}
+  image: {fileID: 0}
+  clonePrefab: {fileID: 4822251852250662665, guid: c10a74b25f8b94d4fa7dac56c1eb9c20, type: 3}
 --- !u!95 &593783681320185106
 Animator:
   serializedVersion: 5
@@ -393,6 +399,7 @@ MonoBehaviour:
   playerHealthBar: {fileID: 0}
   maxHealth: 0
   currentHealth: 0
+  healthDecreaseSpeed: 0.5
 --- !u!70 &3391616792425309692
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

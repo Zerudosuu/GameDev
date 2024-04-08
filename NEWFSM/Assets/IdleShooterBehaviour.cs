@@ -16,7 +16,7 @@ public class IdleShooterBehaviour : StateMachineBehaviour
 
     private float horizontal;
 
-    private bool isFacingRight = true;
+    public bool isFacingRight = true;
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(

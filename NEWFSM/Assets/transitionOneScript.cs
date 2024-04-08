@@ -38,6 +38,10 @@ public class transitionOneScript : StateMachineBehaviour
         {
             PlayerMovement.instance.animator.Play("SamuraiCommanderAttackTwo");
         }
+        else if (NearestEnemy.instance.isAttacking)
+        {
+            NearestEnemy.instance.anim.Play("SamuraiAttackTwo");
+        }
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state

@@ -10,6 +10,8 @@ public class PlayerHealth : MonoBehaviour
     public int maxHealth;
     public float currentHealth;
 
+    public float healthDecreaseSpeed = .5f;
+
     // Start is called before the first frame update
     public void Start()
     {
@@ -27,8 +29,24 @@ public class PlayerHealth : MonoBehaviour
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
+        StartCoroutine(DecreaseHealthBarOverTime(currentHealth));
         playerHealthBar.value = currentHealth;
     } // Update is called once per frame
+
+    IEnumerator DecreaseHealthBarOverTime(float newHealth)
+    {
+        float startHealth = playerHealthBar.value;
+        float timer = 0f;
+
+        while (timer < healthDecreaseSpeed)
+        {
+            timer += Time.deltaTime;
+            playerHealthBar.value = Mathf.Lerp(startHealth, newHealth, timer / healthDecreaseSpeed);
+            yield return null;
+        }
+
+        playerHealthBar.value = newHealth; // Ensure that the health bar value reaches exactly newHealth
+    }
 
     public void UpdateHealth(int newMaxHealth)
     {

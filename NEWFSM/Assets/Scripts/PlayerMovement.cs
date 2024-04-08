@@ -1,6 +1,7 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -87,6 +88,15 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI Charrname;
 
+    public Vector3 checkpointPos;
+
+    public Sprite sprite;
+    public Image image;
+
+    private GameObject canvas;
+
+    public GameObject clonePrefab;
+
     void Awake()
     {
         instance = this;
@@ -101,10 +111,14 @@ public class PlayerMovement : MonoBehaviour
         characters.UpdateCharacter();
 
         Charrname.text = NameCharacter.ToString();
+        image.sprite = sprite;
+
+        checkpointPos = transform.position;
     }
 
     void Update()
     {
+        image.sprite = sprite;
         Charrname.text = NameCharacter.ToString();
         isinMelleRange = meleeScript.canAttack;
 
@@ -138,9 +152,8 @@ public class PlayerMovement : MonoBehaviour
         if (hit.collider != null)
         {
             // Handle the collision
-            Debug.Log("Raycast hit: " + hit.collider.gameObject.name);
+
             canShoot = true;
-            print(canShoot);
         }
         else
         {
@@ -197,6 +210,11 @@ public class PlayerMovement : MonoBehaviour
         {
             Attack();
         }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            StartCoroutine(InstantiateClone());
+        }
     }
 
     IEnumerator ShootAndResetTimer()
@@ -211,6 +229,19 @@ public class PlayerMovement : MonoBehaviour
         // Reset the time remaining to the interval after shooting
         TimeRemaining = 0.40f;
         canShoot = true;
+    }
+
+    IEnumerator InstantiateClone()
+    {
+        // Instantiate three clones simultaneously
+        for (int i = 0; i < 3; i++)
+        {
+            // Instantiate your clone GameObject here
+            GameObject clone = Instantiate(clonePrefab, transform.position, Quaternion.identity);
+            // You may need to adjust the position and rotation as per your requirements
+
+            yield return new WaitForSeconds(1.0f);
+        }
     }
 
     private void Shoot()
@@ -245,7 +276,8 @@ public class PlayerMovement : MonoBehaviour
                 target.GetComponent<Health>().TakeDamage(Damage);
                 if (target.GetComponent<Health>().currentHealth <= 0)
                 {
-                    uiManager.EnemyCount--;
+                    uiManager.EnemyCount -= 1;
+                    ;
                     uiManager.UpdateEnemyCount();
                 }
 
@@ -376,5 +408,17 @@ public class PlayerMovement : MonoBehaviour
         {
             isinMelleRange = true;
         }
+    }
+
+    public void Die()
+    {
+        StartCoroutine(Respawn(0.5f));
+    }
+
+    IEnumerator Respawn(float duration)
+    {
+        yield return new WaitForSeconds(duration);
+        rb.velocity = Vector2.zero;
+        transform.position = checkpointPos;
     }
 }

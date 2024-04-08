@@ -1,38 +1,35 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class ChaseBehaviour : StateMachineBehaviour
+public class ChaseShooterBehaviour : StateMachineBehaviour
 {
+    IdleShooterBehaviour idleBehaviour;
+
+    public bool isFacingRight = true;
+
     private Transform Player;
     private Rigidbody2D RB;
 
     private AgrroTrigger agrroTrigger;
     private AttackTrigger attackTrigger;
 
-    [SerializeField]
-    private float MovementSpeed = 5f;
+    public float RandomMovementSpeed = 5f;
 
     private float horizontal;
 
-    public bool isFacingRight = true;
-    public float RandomMovementSpeed = 5f;
-    public Vector3 targetPos;
-
-    GroundCheck groundCheck;
-
-    IdleBehaviour idleBehaviour;
-
-    public override void OnStateEnter(
+    // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
+    override public void OnStateEnter(
         Animator animator,
         AnimatorStateInfo stateInfo,
         int layerIndex
     )
     {
-        groundCheck = animator.GetComponentInChildren<GroundCheck>();
         Player = GameObject.FindGameObjectWithTag("Player").transform;
         RB = animator.GetComponent<Rigidbody2D>();
         agrroTrigger = animator.gameObject.GetComponentInChildren<AgrroTrigger>();
         attackTrigger = animator.gameObject.GetComponentInChildren<AttackTrigger>();
-        idleBehaviour = animator.GetBehaviour<IdleBehaviour>();
+        idleBehaviour = animator.GetBehaviour<IdleShooterBehaviour>();
         if (
             Player.transform.position.x > animator.transform.position.x
             && !idleBehaviour.isFacingRight
@@ -49,22 +46,13 @@ public class ChaseBehaviour : StateMachineBehaviour
         }
     }
 
-    public override void OnStateUpdate(
+    // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
+    override public void OnStateUpdate(
         Animator animator,
         AnimatorStateInfo stateInfo,
         int layerIndex
     )
     {
-        if (
-            !groundCheck.isGrounded
-            && animator.GetCurrentAnimatorStateInfo(layerIndex).IsName("Enemy")
-        )
-        {
-            RB.velocity = Vector3.zero;
-            agrroTrigger.isAggroed = false;
-            animator.SetBool("isChasing", false);
-        }
-
         horizontal = RB.velocity.x;
         if (!agrroTrigger.isAggroed)
         {
@@ -89,14 +77,28 @@ public class ChaseBehaviour : StateMachineBehaviour
         }
     }
 
+    // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
+    override public void OnStateExit(
+        Animator animator,
+        AnimatorStateInfo stateInfo,
+        int layerIndex
+    ) { }
+
     private void Flip(Animator animator)
     {
         animator.transform.Rotate(0f, 180f, 0f);
         isFacingRight = !isFacingRight;
     }
 
-    public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    {
-        RB.velocity = Vector2.zero;
-    }
+    // OnStateMove is called right after Animator.OnAnimatorMove()
+    //override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    //{
+    //    // Implement code that processes and affects root motion
+    //}
+
+    // OnStateIK is called right after Animator.OnAnimatorIK()
+    //override public void OnStateIK(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    //{
+    //    // Implement code that sets up animation IK (inverse kinematics)
+    //}
 }

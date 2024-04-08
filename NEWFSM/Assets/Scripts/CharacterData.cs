@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Animations;
 using UnityEngine;
+using UnityEngine.Animations;
 
 [CreateAssetMenu(fileName = "New Character", menuName = "Character")]
 public class CharacterData : ScriptableObject
@@ -22,7 +22,7 @@ public class CharacterData : ScriptableObject
 
     public int DamageTaken;
 
-    public AnimatorController animatorController;
+    public RuntimeAnimatorController animatorController;
 
     public void ResetDamageTaken()
     {

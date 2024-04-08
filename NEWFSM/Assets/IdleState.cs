@@ -37,6 +37,11 @@ public class IdleState : StateMachineBehaviour
         {
             PlayerMovement.instance.animator.Play("SamuraiCommanderAttackOne");
         }
+
+        if (NearestEnemy.instance.isAttacking && NearestEnemy.instance != null)
+        {
+            NearestEnemy.instance.anim.Play("SamuraiAttackOne");
+        }
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state

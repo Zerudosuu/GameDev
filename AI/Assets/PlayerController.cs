@@ -139,36 +139,27 @@ public class PlayerController : MonoBehaviour
 
     void FaceTarget()
     {
+        if (agent.destination == transform.position)
+            return;
+
         Vector3 facing = Vector3.zero;
+
         if (target != null)
         {
             facing = target.transform.position;
         }
-        else if (agent.destination != transform.position)
+        else
         {
             facing = agent.destination;
         }
 
         Vector3 direction = (facing - transform.position).normalized;
         Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
-
-        // If the player is attacking, always look at the target
-        if (currentAnimation == ATTACK && target != null)
-        {
-            transform.rotation = Quaternion.Slerp(
-                transform.rotation,
-                lookRotation,
-                Time.deltaTime * lookRotationSpeed
-            );
-        }
-        else // Otherwise, smooth rotation towards the movement direction
-        {
-            transform.rotation = Quaternion.Slerp(
-                transform.rotation,
-                lookRotation,
-                Time.deltaTime * lookRotationSpeed
-            );
-        }
+        transform.rotation = Quaternion.Slerp(
+            transform.rotation,
+            lookRotation,
+            Time.deltaTime * lookRotationSpeed
+        );
     }
 
     void ReachDistance()

@@ -44,6 +44,13 @@ public class EnemyMovement : MonoBehaviour
                 CharacterHander CharHander = target.GetComponent<CharacterHander>();
                 PlayerHealth playerHealth = target.GetComponent<PlayerHealth>();
 
+                CloneHealth cloneHealth = target.GetComponent<CloneHealth>();
+
+                if (cloneHealth != null)
+                {
+                    cloneHealth.TakeDamage(10);
+                }
+
                 CharHander.IncrementDamageTaken(3);
                 playerHealth.TakeDamage(3);
             }
