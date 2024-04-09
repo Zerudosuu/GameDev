@@ -18,6 +18,8 @@ public class CharacterHander : MonoBehaviour
 
     GameManager gameManager;
 
+    bool allCharactersDead = true;
+
     void Start()
     {
         gameManager = GameObject
@@ -31,11 +33,12 @@ public class CharacterHander : MonoBehaviour
         UpdateCharacter();
         playerHealth.Start();
         ResetDamageTaken();
+        allCharactersDead = false;
     }
 
     void Update()
     {
-        bool allCharactersDead = true;
+        allCharactersDead = true;
         foreach (CharacterData character in Characters)
         {
             if (!character.isDead)
@@ -83,14 +86,11 @@ public class CharacterHander : MonoBehaviour
                 UpdateCharacter();
             }
         }
+        else
+            gameManager.EndGame();
         // Check if all characters are dead
 
         // If all characters are dead, trigger game over
-        if (allCharactersDead)
-        {
-            // Call a method in GameManager to trigger game over
-            gameManager.EndGame();
-        }
     }
 
     public void UpdateCharacter()

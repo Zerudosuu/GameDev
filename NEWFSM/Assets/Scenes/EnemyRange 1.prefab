@@ -40,7 +40,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5930131993928782514}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: EnemyRange 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -305,7 +305,7 @@ GameObject:
   - component: {fileID: 2471035905442113286}
   - component: {fileID: 1474174489857153826}
   - component: {fileID: 2436422988453060132}
-  m_Layer: 3
+  m_Layer: 8
   m_Name: Body
   m_TagString: Enemy
   m_Icon: {fileID: 0}

@@ -457,7 +457,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthBar: {fileID: 827357988329179985}
-  maxHealth: 500
+  maxHealth: 200
   currentHealth: 0
 --- !u!70 &793609275854444788
 CapsuleCollider2D:

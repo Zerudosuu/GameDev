@@ -95,8 +95,6 @@ public class PlayerMovement : MonoBehaviour
 
     private GameObject canvas;
 
-    public GameObject clonePrefab;
-
     void Awake()
     {
         instance = this;
@@ -114,6 +112,8 @@ public class PlayerMovement : MonoBehaviour
         image.sprite = sprite;
 
         checkpointPos = transform.position;
+
+        Time.timeScale = 1;
     }
 
     void Update()
@@ -210,11 +210,6 @@ public class PlayerMovement : MonoBehaviour
         {
             Attack();
         }
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            StartCoroutine(InstantiateClone());
-        }
     }
 
     IEnumerator ShootAndResetTimer()
@@ -229,19 +224,6 @@ public class PlayerMovement : MonoBehaviour
         // Reset the time remaining to the interval after shooting
         TimeRemaining = 0.40f;
         canShoot = true;
-    }
-
-    IEnumerator InstantiateClone()
-    {
-        // Instantiate three clones simultaneously
-        for (int i = 0; i < 3; i++)
-        {
-            // Instantiate your clone GameObject here
-            GameObject clone = Instantiate(clonePrefab, transform.position, Quaternion.identity);
-            // You may need to adjust the position and rotation as per your requirements
-
-            yield return new WaitForSeconds(1.0f);
-        }
     }
 
     private void Shoot()

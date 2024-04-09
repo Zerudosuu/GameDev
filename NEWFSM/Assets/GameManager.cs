@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (uiManager.EnemyCount == 0)
+        if (uiManager.EnemyCount <= 0)
         {
             NextLevel();
         }
@@ -55,7 +55,7 @@ public class GameManager : MonoBehaviour
 
     public void PlayAgain()
     {
-        SceneManager.LoadScene(2);
+        SceneManager.LoadScene(1);
     }
 
     public void Exit()
