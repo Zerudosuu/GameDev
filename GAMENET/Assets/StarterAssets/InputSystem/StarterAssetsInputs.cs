@@ -17,6 +17,10 @@ namespace StarterAssets
 
         public bool shoot;
 
+        public event EventHandler onAimStarted;
+        public event EventHandler onAimStopped;
+        public event EventHandler onShootStarted;
+
         [Header("Movement Settings")]
         public bool analogMovement;
 
@@ -62,11 +66,26 @@ namespace StarterAssets
         private void AimInput(bool newAimState)
         {
             aim = newAimState;
+            // If aiming started, raise the onAimStarted event
+            if (newAimState && onAimStarted != null)
+            {
+                onAimStarted(this, EventArgs.Empty);
+            }
+            // If aiming stopped, raise the onAimStopped event
+            else if (!newAimState && onAimStopped != null)
+            {
+                onAimStopped(this, EventArgs.Empty);
+            }
         }
 
         private void ShootInput(bool newShootState)
         {
             shoot = newShootState;
+            // If shoot started, raise the onShootStarted event
+            if (newShootState && onShootStarted != null)
+            {
+                onShootStarted(this, EventArgs.Empty);
+            }
         }
 
         public void MoveInput(Vector2 newMoveDirection)
