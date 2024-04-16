@@ -185,7 +185,7 @@ public class PlayerController : MonoBehaviour
                 target.InteractWithItem();
                 target = null;
 
-                Invoke(nameof(ResetBusyState), 0.5f);
+                Invoke(nameof(ResetBusyState), 0.1f);
                 break;
         }
     }
