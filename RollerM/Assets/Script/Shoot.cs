@@ -1,11 +1,16 @@
 using System.Collections;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class PlayerMovement : MonoBehaviour
 {
     public UnityEvent PullRecord;
+
+    [HorizontalGroup("RunGroup"), SuffixLabel("m/s"), LabelWidth(100)]
     public float jumpForce = 5f; // Adjust the jump force as needed
+
+    [HorizontalGroup("RunGroup")]
     public bool isGrounded; // Flag to check if the player is grounded
 
     [SerializeField]
