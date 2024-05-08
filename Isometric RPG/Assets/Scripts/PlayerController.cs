@@ -8,88 +8,78 @@ public class PlayerController : MonoBehaviour
     private PlayerInputAction inputActions;
     private InputAction move;
 
-    private Rigidbody rb;
-
-    [SerializeField]
-    private float movementForce = 1f;
-
-    [SerializeField]
-    private float jumpForce = 5f;
-
-    [SerializeField]
-    private float maxSpeed = 5f;
-    private Vector3 forceDirection = Vector3.zero;
-
-    // Default forward direction
-
-    [SerializeField]
-    private Camera playerCamera;
     private Animator animator;
+
+    [SerializeField]
+    private Rigidbody _rb;
+
+    [SerializeField]
+    private float _speed = 5;
+
+    [SerializeField]
+    private float _turnSpeed = 360;
+
+    private Vector3 _input = Vector3.zero;
 
     private void Awake()
     {
-        rb = this.GetComponent<Rigidbody>();
+        _rb = GetComponent<Rigidbody>();
         inputActions = new PlayerInputAction();
-        animator = this.GetComponent<Animator>();
-    }
+        animator = GetComponent<Animator>();
 
-    private void OnEnable()
-    {
-        // playerActionsAsset.Player.Jump.started += DoJump;
-        // playerActionsAsset.Player.Attack.started += DoAttack;
         move = inputActions.Player.Move;
+        move.performed += ctx => OnMove(ctx.ReadValue<Vector2>());
+        move.canceled += ctx => OnMove(Vector2.zero);
+
         inputActions.Player.Enable();
     }
 
-    private void OnDisable()
+    private void OnMove(Vector2 movement)
     {
-        // playerActionsAsset.Player.Jump.started -= DoJump;
-        // playerActionsAsset.Player.Attack.started -= DoAttack;
-        inputActions.Player.Disable();
+        _input = new Vector3(movement.x, 0, movement.y);
+    }
+
+    private void Update()
+    {
+        float speed = _rb.velocity.magnitude;
+        animator.SetFloat("Speed", speed);
+        Look();
     }
 
     private void FixedUpdate()
     {
-        forceDirection = Vector3.zero;
-        forceDirection += move.ReadValue<Vector2>().x * movementForce * Vector3.right;
-        forceDirection += move.ReadValue<Vector2>().y * Vector3.forward * movementForce;
-
-        rb.AddForce(forceDirection, ForceMode.Impulse);
-        forceDirection = Vector3.zero;
-
-        if (rb.velocity.y < 0f)
-            rb.velocity -= Vector3.down * Physics.gravity.y * Time.fixedDeltaTime;
-
-        Vector3 horizontalVelocity = rb.velocity;
-        horizontalVelocity.y = 0;
-        if (horizontalVelocity.sqrMagnitude > maxSpeed * maxSpeed)
-            rb.velocity = horizontalVelocity.normalized * maxSpeed + Vector3.up * rb.velocity.y;
-
-        LookAt();
+        Move();
     }
 
-    private void LookAt()
+    private void Look()
     {
-        Vector3 direction = rb.velocity;
-        direction.y = 0f;
+        if (_input == Vector3.zero)
+            return;
 
-        if (move.ReadValue<Vector2>().sqrMagnitude > 0.1f && direction.sqrMagnitude > 0.1f)
-            this.rb.rotation = Quaternion.LookRotation(direction, Vector3.up);
-        else
-            rb.angularVelocity = Vector3.zero;
+        var rot = Quaternion.LookRotation(_input.ToIso(), Vector3.up);
+        transform.rotation = Quaternion.RotateTowards(
+            transform.rotation,
+            rot,
+            _turnSpeed * Time.deltaTime
+        );
     }
 
-    private Vector3 Forward(Camera playerCamera)
+    private void Move()
     {
-        Vector3 forward = playerCamera.transform.forward;
-        forward.y = 0;
-        return forward.normalized;
+        Vector3 movement = transform.forward * _input.magnitude * _speed;
+
+        _rb.velocity = movement;
     }
 
-    private Vector3 Right(Camera playerCamera)
+    private void OnDisable()
     {
-        Vector3 right = playerCamera.transform.right;
-        right.y = 0;
-        return right.normalized;
+        inputActions.Player.Disable();
     }
+}
+
+public static class Helpers
+{
+    private static Matrix4x4 _isoMatrix = Matrix4x4.Rotate(Quaternion.Euler(0, 45, 0));
+
+    public static Vector3 ToIso(this Vector3 input) => _isoMatrix.MultiplyPoint3x4(input);
 }
