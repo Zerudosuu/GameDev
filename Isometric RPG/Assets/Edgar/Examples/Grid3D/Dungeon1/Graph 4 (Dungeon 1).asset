@@ -255,8 +255,8 @@ MonoBehaviour:
   - {fileID: 2083299090809660385}
   - {fileID: -1829825122024719841}
   EditorData:
-    PanOffset: {x: -369.92798, y: -12.864353}
-    Zoom: 1.3646368
+    PanOffset: {x: 62.773193, y: 127.39702}
+    Zoom: 0.80580443
   RoomType: Edgar.Unity.Examples.Grid3D.Dungeon1.Dungeon1Room
   ConnectionType: Edgar.Unity.Examples.Grid3D.Dungeon1.Dungeon1Connection
   IsDirected: 0

@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fba5c94daa45214e9f552cc3dd43b69, type: 3}
+  m_Name: Dungeon 1 Input Setup
+  m_EditorClassIdentifier: 
+  LevelGraph: {fileID: 11400000, guid: 831fa8f3f7995f94e9a4ed11d0c4660a, type: 2}
+  UseCorridors: 1
+  RoomTemplates:
+    Basic:
+    - {fileID: 3931820529819902549, guid: 4f7ab8325791ee640bfe1f05cf1f8c24, type: 3}
+    Boss: []
+    BossEntrance: []
+    Social: []
+    Entrance:
+    - {fileID: 7114107107499430127, guid: 25469d17fd20d6c4e9ae224d8336a69b, type: 3}
+    Corridors:
+    - {fileID: 6130512567740240034, guid: df7e7285d92421b40b41b23238283280, type: 3}
+    Cave: []
+    Trap: []
+    Hub: []
