@@ -9,6 +9,7 @@ public class ThirdPersonController : MonoBehaviour
     //input fields
     private PlayerInputAction playerActionsAsset;
     private InputAction move;
+    private InputAction attack;
 
     //movement fields
     private Rigidbody rb;
@@ -27,25 +28,30 @@ public class ThirdPersonController : MonoBehaviour
     private Camera playerCamera;
     private Animator animator;
 
+    private int currentComboAttack = 1; // Track the current combo attack (1, 2, or 3)
+    private float lastAttackTime = 0f; // Timer for combo window
+    private float maxComboDelay = 1f; // Maximum time allowed between attacks for a combo
+
     private void Awake()
     {
         rb = this.GetComponent<Rigidbody>();
         playerActionsAsset = new PlayerInputAction();
         animator = this.GetComponent<Animator>();
+        move = playerActionsAsset.Player.Move;
+        attack = playerActionsAsset.Player.Attack;
     }
 
     private void OnEnable()
     {
         // playerActionsAsset.Player.Jump.started += DoJump;
-        // playerActionsAsset.Player.Attack.started += DoAttack;
-        move = playerActionsAsset.Player.Move;
+        attack.performed += DoAttack;
         playerActionsAsset.Player.Enable();
     }
 
     private void OnDisable()
     {
         // playerActionsAsset.Player.Jump.started -= DoJump;
-        // playerActionsAsset.Player.Attack.started -= DoAttack;
+        attack.performed -= DoAttack;
         playerActionsAsset.Player.Disable();
     }
 
@@ -116,6 +122,6 @@ public class ThirdPersonController : MonoBehaviour
 
     private void DoAttack(InputAction.CallbackContext obj)
     {
-        animator.SetTrigger("attack");
+        animator.SetTrigger("Attack1");
     }
 }

@@ -25,7 +25,7 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
-  - _ENABLEHOLOGRAM_ON
+  - _ENCHANTEDLERPTOGGLE_ON
   - _SHADERFADING_NONE
   - _SHADERSPACE_UV
   - _TEXTURELAYER1SHEETTOGGLE_ON
@@ -181,8 +181,8 @@ Material:
     - _BurnFade: 1
     - _BurnInsideContrast: 2
     - _BurnInsideNoiseFactor: 0.2
-    - _BurnRadius: 5
-    - _BurnSwirlFactor: 1
+    - _BurnRadius: 37.1
+    - _BurnSwirlFactor: 5
     - _BurnWidth: 0.1
     - _CamouflageAnimationToggle: 0
     - _CamouflageContrast: 1
@@ -197,7 +197,7 @@ Material:
     - _ColorReplaceFade: 1
     - _ColorReplaceRange: 0.05
     - _ColorReplaceSmoothness: 0.1
-    - _Contrast: 1
+    - _Contrast: -6.89
     - _Cull: 2
     - _CustomFadeAlpha: 1
     - _CustomFadeNoiseFactor: 0
@@ -245,7 +245,7 @@ Material:
     - _EnableGaussianBlur: 0
     - _EnableGlitch: 0
     - _EnableHalftone: 0
-    - _EnableHologram: 1
+    - _EnableHologram: 0
     - _EnableHue: 0
     - _EnableInkSpread: 0
     - _EnableInnerOutline: 0
@@ -291,7 +291,7 @@ Material:
     - _EnchantedBrightness: 1
     - _EnchantedContrast: 0.5
     - _EnchantedFade: 1
-    - _EnchantedLerpToggle: 0
+    - _EnchantedLerpToggle: 1
     - _EnchantedRainbowDensity: 0.5
     - _EnchantedRainbowSaturation: 0.8
     - _EnchantedRainbowSpeed: 0.5
@@ -334,9 +334,9 @@ Material:
     - _HologramDistortionScale: 10
     - _HologramDistortionSpeed: 2
     - _HologramFade: 1
-    - _HologramLineFrequency: 100
+    - _HologramLineFrequency: 108
     - _HologramLineGap: 3
-    - _HologramLineSpeed: 0.05
+    - _HologramLineSpeed: 0.5
     - _HologramMinAlpha: 0.2
     - _Hue: 0
     - _InkSpreadContrast: 2
@@ -362,7 +362,7 @@ Material:
     - _OuterOutlineFade: 1
     - _OuterOutlineOutlineOnlyToggle: 0
     - _OuterOutlineTextureToggle: 0
-    - _OuterOutlineWidth: 0.04
+    - _OuterOutlineWidth: 5
     - _PingPongGlowContrast: 1
     - _PingPongGlowFade: 1
     - _PingPongGlowFrequency: 3
@@ -374,7 +374,7 @@ Material:
     - _PixelPerfectUV: 0
     - _PixelateFade: 1
     - _PixelatePixelDensity: 16
-    - _PixelatePixelsPerUnit: 100
+    - _PixelatePixelsPerUnit: 500
     - _PixelsPerUnit: 100
     - _PoisonDensity: 3
     - _PoisonFade: 1
@@ -539,11 +539,11 @@ Material:
     - _BlackTintColor: {r: 0, g: 0, b: 1, a: 0}
     - _BurnEdgeColor: {r: 11.98431, g: 1.129412, b: 0.1254902, a: 0}
     - _BurnEdgeNoiseScale: {r: 0.3, g: 0.3, b: 0, a: 0}
-    - _BurnInsideColor: {r: 0.75, g: 0.5625, b: 0.525, a: 0}
+    - _BurnInsideColor: {r: 0, g: 0, b: 0, a: 0}
     - _BurnInsideNoiseColor: {r: 3084.047, g: 257.0039, b: 0, a: 0}
     - _BurnInsideNoiseScale: {r: 0.5, g: 0.5, b: 0, a: 0}
     - _BurnPosition: {r: 0, g: 5, b: 0, a: 0}
-    - _BurnSwirlNoiseScale: {r: 0.1, g: 0.1, b: 0, a: 0}
+    - _BurnSwirlNoiseScale: {r: 5.2, g: 0.1, b: 0, a: 0}
     - _CamouflageBaseColor: {r: 0.7450981, g: 0.7254902, b: 0.5686274, a: 0}
     - _CamouflageColorA: {r: 0.62745106, g: 0.5882353, b: 0.43137258, a: 0}
     - _CamouflageColorB: {r: 0.47058815, g: 0.43137258, b: 0.31372547, a: 0}
@@ -563,8 +563,8 @@ Material:
     - _DirectionalGlowFadeEdgeColor: {r: 11.98431, g: 0.6901961, b: 0.6901961, a: 0}
     - _DirectionalGlowFadeNoiseScale: {r: 0.4, g: 0.4, b: 0, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
-    - _EmissionTint: {r: 2.996078, g: 0.1568628, b: 0.1568628, a: 0}
-    - _EnchantedHighColor: {r: 0, g: 0.7098798, b: 4.237095, a: 0}
+    - _EmissionTint: {r: 3.9999998, g: 0, b: 0, a: 0}
+    - _EnchantedHighColor: {r: 5.656854, g: 4.676927, b: 0, a: 0}
     - _EnchantedLowColor: {r: 2.996078, g: 0, b: 0, a: 0}
     - _EnchantedScale: {r: 0.1, g: 0.1, b: 0, a: 0}
     - _EnchantedSpeed: {r: 0, g: 1, b: 0, a: 0}
@@ -656,7 +656,7 @@ Material:
     - _SpriteSheetRect: {r: 0, g: 0, b: 1, a: 1}
     - _SqueezeCenter: {r: 0.5, g: 0.5, b: 0, a: 0}
     - _SqueezeScale: {r: 2, g: 0, b: 0, a: 0}
-    - _StrongTintTint: {r: 1, g: 1, b: 1, a: 1}
+    - _StrongTintTint: {r: 1, g: 0, b: 0, a: 1}
     - _TextureLayer1Color: {r: 0.4494117, g: 1.298301, b: 2.996079, a: 1}
     - _TextureLayer1Offset: {r: 0, g: 0, b: 0, a: 0}
     - _TextureLayer1Scale: {r: 1, g: 1, b: 0, a: 0}
