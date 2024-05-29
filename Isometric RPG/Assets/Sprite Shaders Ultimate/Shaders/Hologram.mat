@@ -25,6 +25,7 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
+  - _ENABLEHOLOGRAM_ON
   - _ENCHANTEDLERPTOGGLE_ON
   - _SHADERFADING_NONE
   - _SHADERSPACE_UV
@@ -245,7 +246,7 @@ Material:
     - _EnableGaussianBlur: 0
     - _EnableGlitch: 0
     - _EnableHalftone: 0
-    - _EnableHologram: 0
+    - _EnableHologram: 1
     - _EnableHue: 0
     - _EnableInkSpread: 0
     - _EnableInnerOutline: 0
@@ -329,15 +330,15 @@ Material:
     - _HalftoneInvert: 0
     - _HalftoneTiling: 4
     - _HologramContrast: 1
-    - _HologramDistortionDensity: 0.5
-    - _HologramDistortionOffset: 0.5
-    - _HologramDistortionScale: 10
+    - _HologramDistortionDensity: 14.66
+    - _HologramDistortionOffset: 10
+    - _HologramDistortionScale: 11.95
     - _HologramDistortionSpeed: 2
     - _HologramFade: 1
-    - _HologramLineFrequency: 108
-    - _HologramLineGap: 3
-    - _HologramLineSpeed: 0.5
-    - _HologramMinAlpha: 0.2
+    - _HologramLineFrequency: 250
+    - _HologramLineGap: 4.02
+    - _HologramLineSpeed: 0.1
+    - _HologramMinAlpha: 0
     - _Hue: 0
     - _InkSpreadContrast: 2
     - _InkSpreadDistance: 3
@@ -594,7 +595,7 @@ Material:
     - _GlitchNoiseScale: {r: 0, g: 3, b: 0, a: 0}
     - _GlitchNoiseSpeed: {r: 0, g: 1, b: 0, a: 0}
     - _HalftonePosition: {r: 0, g: 0, b: 0, a: 0}
-    - _HologramTint: {r: 0.3137255, g: 1.662745, b: 2.996078, a: 1}
+    - _HologramTint: {r: 2.9433959, g: 2.721877, b: 0.7913847, a: 1}
     - _InkSpreadColor: {r: 8.47419, g: 5.013525, b: 0.08873497, a: 0}
     - _InkSpreadNoiseScale: {r: 0.4, g: 0.4, b: 0, a: 0}
     - _InkSpreadPosition: {r: 0.5, g: -1, b: 0, a: 0}

@@ -28,15 +28,18 @@ public class ThirdPersonController : MonoBehaviour
     private Camera playerCamera;
     private Animator animator;
 
-    private int currentComboAttack = 1; // Track the current combo attack (1, 2, or 3)
+    private int currentComboAttack = 1; // Track the current combo attack (1, 2, or 3)`
     private float lastAttackTime = 0f; // Timer for combo window
     private float maxComboDelay = 1f; // Maximum time allowed between attacks for a combo
+
+    public float knockbackForce = 10f;
 
     private void Awake()
     {
         rb = this.GetComponent<Rigidbody>();
         playerActionsAsset = new PlayerInputAction();
-        animator = this.GetComponent<Animator>();
+        animator = gameObject?.GetComponent<Animator>();
+
         move = playerActionsAsset.Player.Move;
         attack = playerActionsAsset.Player.Attack;
     }
@@ -53,6 +56,11 @@ public class ThirdPersonController : MonoBehaviour
         // playerActionsAsset.Player.Jump.started -= DoJump;
         attack.performed -= DoAttack;
         playerActionsAsset.Player.Disable();
+    }
+
+    void Update()
+    {
+        animator.SetFloat("Speed", rb.velocity.magnitude);
     }
 
     private void FixedUpdate()
@@ -72,8 +80,6 @@ public class ThirdPersonController : MonoBehaviour
         horizontalVelocity.y = 0;
         if (horizontalVelocity.sqrMagnitude > maxSpeed * maxSpeed)
             rb.velocity = horizontalVelocity.normalized * maxSpeed + Vector3.up * rb.velocity.y;
-
-        animator.SetFloat("Speed", rb.velocity.magnitude);
 
         LookAt();
     }

@@ -4,11 +4,10 @@ using UnityEngine;
 
 public class WeaponHit : MonoBehaviour
 {
-    private void OnTriggerEnter(Collider other)
+    public float Damage = 10;
+
+    void OnCollisionEnter(Collision other)
     {
-        if (other.CompareTag("Enemy"))
-        {
-            print("Enemy hit");
-        }
+        print(other.gameObject);
     }
 }

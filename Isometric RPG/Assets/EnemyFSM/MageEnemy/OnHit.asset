@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a686a47eee2fa44cb0a34b5d86e4d5e, type: 3}
+  m_Name: OnHit
+  m_EditorClassIdentifier: 
+  _serializedGraph: '{"type":"NodeCanvas.BehaviourTrees.BehaviourTree","nodes":[{"dynamic":true,"_position":{"x":500.0,"y":481.0},"$type":"NodeCanvas.BehaviourTrees.Selector","$id":"0"},{"_condition":{"valueA":{"_name":"IsDead","_targetVariableID":"00bf3239-ac0c-4d01-af9a-3eb389d644f1"},"valueB":{"_value":true},"$type":"NodeCanvas.Tasks.Conditions.CheckBoolean"},"_position":{"x":207.2909,"y":610.2239},"$type":"NodeCanvas.BehaviourTrees.ConditionalEvaluator","$id":"1"},{"_position":{"x":121.7681,"y":721.8692},"$type":"NodeCanvas.BehaviourTrees.StepIterator","$id":"2"},{"_action":{"animator":{"_name":"MageAnimator","_targetVariableID":"88afeb8b-6375-47da-b60f-e8d491c2bf14"},"duration":{"_value":2.0},"clipName":"Death","$type":"SetAnimationClipTask"},"_position":{"x":-80.07948,"y":829.5214},"$type":"NodeCanvas.BehaviourTrees.ActionNode","$id":"3"},{"_action":{"waitTime":{"_value":2.0},"$type":"NodeCanvas.Tasks.Actions.Wait"},"_position":{"x":190.5458,"y":831.0165},"$type":"NodeCanvas.BehaviourTrees.ActionNode","$id":"4"},{"_action":{"immediately":true,"$type":"NodeCanvas.Tasks.Actions.DestroyGameObject"},"_position":{"x":396.3548,"y":836.0069},"$type":"NodeCanvas.BehaviourTrees.ActionNode","$id":"5"},{"_action":{"animator":{"_name":"MageAnimator","_targetVariableID":"88afeb8b-6375-47da-b60f-e8d491c2bf14"},"duration":{"_value":0.26},"clipName":"Hit","$type":"SetAnimationClipTask"},"_position":{"x":459.8513,"y":620.0391},"$type":"NodeCanvas.BehaviourTrees.ActionNode","$id":"6"},{"_action":{"boolVariable":{"_name":"OnHit","_targetVariableID":"b3d4eba5-cead-4c96-8f7b-ae19a2059b16"},"setTo":0,"$type":"NodeCanvas.Tasks.Actions.SetBoolean"},"_position":{"x":687.0739,"y":619.6124},"$type":"NodeCanvas.BehaviourTrees.ActionNode","$id":"7"}],"connections":[{"_sourceNode":{"$ref":"0"},"_targetNode":{"$ref":"1"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"0"},"_targetNode":{"$ref":"6"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"0"},"_targetNode":{"$ref":"7"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"1"},"_targetNode":{"$ref":"2"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"2"},"_targetNode":{"$ref":"3"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"2"},"_targetNode":{"$ref":"4"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"2"},"_targetNode":{"$ref":"5"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"}],"canvasGroups":[],"localBlackboard":{"_variables":{}},"derivedData":{"repeat":true,"$type":"NodeCanvas.BehaviourTrees.BehaviourTree+DerivedSerializationData"}}'
+  _objectReferences: []
+  _graphSource:
+    _version: 3.3
+    _category: 
+    _comments: 
+    _translation: {x: 203, y: -372}
+    _zoomFactor: 1
+  _haltSerialization: 0
+  _externalSerializationFile: {fileID: 0}

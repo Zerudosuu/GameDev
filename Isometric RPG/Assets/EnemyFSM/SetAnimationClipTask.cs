@@ -6,7 +6,12 @@ using UnityEngine;
 public class SetAnimationClipTask : ActionTask
 {
     public BBParameter<Animator> animator;
+    public BBParameter<float> duration;
     public string clipName = "Chasing";
+
+    private float startTime;
+
+    public bool waitActionFinish;
 
     protected override void OnExecute()
     {
@@ -16,7 +21,17 @@ public class SetAnimationClipTask : ActionTask
             Debug.LogError(this.name + ": Animator is not assigned!");
             return;
         }
+        startTime = Time.time;
 
         anim.Play(clipName);
+    }
+
+    protected override void OnUpdate()
+    {
+        if (Time.time - startTime >= duration.GetValue())
+        {
+            animator.GetValue().StopPlayback();
+            EndAction(true);
+        }
     }
 }
