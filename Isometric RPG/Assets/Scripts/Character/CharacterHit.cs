@@ -59,9 +59,8 @@ public class CharacterHit : MonoBehaviour
                 animator.SetTrigger("Washit");
 
                 // Get the Health component of the current object
-                Health health = GetComponent<Health>();
 
-                if (health != null)
+                if (TryGetComponent<PlayerHealth>(out var health))
                 {
                     // Determine the damage based on the component present
                     float damage = enemyWeapon != null ? enemyWeapon.Damage : bulletScript.Damage;
@@ -81,6 +80,24 @@ public class CharacterHit : MonoBehaviour
                     ).normalized;
                     ApplyKnockback(knockbackDirection);
                 }
+            }
+        }
+        else if (other.gameObject.GetComponent<ManaCoin>() != null)
+        {
+            if (other.gameObject.GetComponent<ManaCoin>().coinMana == CoinMana.Coin)
+            {
+                Stats stats = GetComponent<Stats>();
+
+                stats.AddCoins(19);
+
+                Destroy(other.gameObject);
+            }
+            else if (other.gameObject.GetComponent<ManaCoin>().coinMana == CoinMana.Mana)
+            {
+                PlayerHealth playerHealth = GetComponent<PlayerHealth>();
+
+                playerHealth.ManaUp(10);
+                Destroy(other.gameObject);
             }
         }
     }

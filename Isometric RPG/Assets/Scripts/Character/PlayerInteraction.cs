@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,8 +8,10 @@ public class PlayerInteraction : MonoBehaviour
     private InputAction Interact;
 
     public Transform playerHand;
-    private bool canPickUp = false;
-    private GameObject weapon;
+    private bool canPickUpWeapon = false;
+    private bool canInteractWithShop = false;
+    private GameObject interactableObject;
+    private WeaponInfo currentEquippedWeapon;
 
     private void Awake()
     {
@@ -25,7 +25,7 @@ public class PlayerInteraction : MonoBehaviour
         playerActionsAsset.Player.Enable();
     }
 
-    void OnDisable()
+    private void OnDisable()
     {
         Interact.performed -= DoInteract;
         playerActionsAsset.Player.Disable();
@@ -33,43 +33,110 @@ public class PlayerInteraction : MonoBehaviour
 
     private void DoInteract(InputAction.CallbackContext context)
     {
-        if (canPickUp)
-            PickUp();
+        if (canPickUpWeapon)
+        {
+            PickUpWeapon();
+        }
+        else if (canInteractWithShop)
+        {
+            OpenShop();
+        }
     }
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.GetComponent<WeaponInfo>() != null)
+        WeaponInfo weaponInfo = other.gameObject.GetComponent<WeaponInfo>();
+        Shop shop = other.gameObject.GetComponent<Shop>();
+
+        if (weaponInfo != null)
         {
-            canPickUp = true;
-            weapon = other.gameObject;
+            canPickUpWeapon = true;
+            canInteractWithShop = false; // Ensure shop interaction is disabled when a weapon is present
+            interactableObject = other.gameObject;
+        }
+        else if (shop != null)
+        {
+            canInteractWithShop = true;
+            canPickUpWeapon = false; // Ensure weapon interaction is disabled when a shop is present
+            interactableObject = other.gameObject;
         }
     }
 
     void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.GetComponent<WeaponInfo>() != null)
+        WeaponInfo weaponInfo = other.gameObject.GetComponent<WeaponInfo>();
+        Shop shop = other.gameObject.GetComponent<Shop>();
+
+        if (weaponInfo != null && interactableObject == other.gameObject)
         {
-            canPickUp = false;
-            weapon = null;
+            canPickUpWeapon = false;
+            interactableObject = null;
+        }
+        else if (shop != null && interactableObject == other.gameObject)
+        {
+            canInteractWithShop = false;
+            interactableObject = null;
         }
     }
 
-    void PickUp()
+    void PickUpWeapon()
     {
-        // Set the weapon's parent to the player's hand transform
-        weapon.transform.SetParent(playerHand);
+        if (interactableObject == null)
+            return;
 
-        // Optionally reset the weapon's local position and rotation
-        weapon.transform.localPosition = Vector3.zero;
-        weapon.transform.localRotation = Quaternion.identity;
+        WeaponInfo weaponInfo = interactableObject.GetComponent<WeaponInfo>();
+        if (weaponInfo.weapon.weaponType == WeaponType.Melee)
+        {
+            // Check if the weapon names are different
+            if (
+                currentEquippedWeapon == null
+                || weaponInfo.weapon.WeaponName != currentEquippedWeapon.weapon.WeaponName
+            )
+            {
+                // If there's a currently equipped weapon, unparent and enable its collider
+                if (currentEquippedWeapon != null)
+                {
+                    currentEquippedWeapon.transform.SetParent(null);
+                    currentEquippedWeapon.GetComponent<Collider>().enabled = true;
+                }
 
-        weapon.GetComponent<Collider>().enabled = false;
+                // Equip the new weapon
+                interactableObject.transform.SetParent(playerHand);
+                interactableObject.transform.localPosition = Vector3.zero;
+                interactableObject.transform.localRotation = Quaternion.identity;
+                interactableObject.GetComponent<Collider>().enabled = false;
 
-        PlayerCurrentWeapon playerCurrentWeapon = GetComponent<PlayerCurrentWeapon>();
+                PlayerCurrentWeapon playerCurrentWeapon = GetComponent<PlayerCurrentWeapon>();
+                playerCurrentWeapon.EquipWeapon(weaponInfo.weapon);
 
-        playerCurrentWeapon.weapon = weapon.GetComponent<WeaponInfo>().weapon;
+                Inventory inventory = GetComponent<Inventory>();
+                inventory.PopulateStats();
 
-        // Optionally, you can add other logic such as equipping the weapon, etc.
+                // Update the current equipped weapon
+                currentEquippedWeapon = weaponInfo;
+            }
+        }
+        else if (weaponInfo.weapon.weaponType == WeaponType.Collectibles)
+        {
+            PlayerHealth playerHealth = GetComponent<PlayerHealth>();
+            if (weaponInfo.weapon.WeaponName == "Health")
+            {
+                weaponInfo.weapon.ApplyHealing(playerHealth);
+            }
+            else
+            {
+                weaponInfo.weapon.ApplyMana(playerHealth);
+            }
+            Destroy(interactableObject);
+        }
+    }
+
+    void OpenShop()
+    {
+        if (interactableObject == null)
+            return;
+
+        Shop shop = interactableObject.GetComponent<Shop>();
+        shop.OpenShop();
     }
 }

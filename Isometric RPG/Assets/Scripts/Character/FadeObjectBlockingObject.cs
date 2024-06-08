@@ -32,10 +32,12 @@ public class FadeObjectBlockingObject : MonoBehaviour
     private Dictionary<FadingObject, Coroutine> RunningCoroutines =
         new Dictionary<FadingObject, Coroutine>();
 
-    private RaycastHit[] Hits = new RaycastHit[10];
+    private List<RaycastHit> Hits = new List<RaycastHit>();
 
-    private void OnEnable()
+    private void Awake()
     {
+        Target = GameObject.FindGameObjectWithTag("Player").transform;
+        Camera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         StartCoroutine(CheckForObjects());
     }
 
@@ -43,50 +45,63 @@ public class FadeObjectBlockingObject : MonoBehaviour
     {
         while (true)
         {
-            int hits = Physics.RaycastNonAlloc(
-                Camera.transform.position,
-                (
-                    Target.transform.position + TargetPositionOffset - Camera.transform.position
-                ).normalized,
-                Hits,
-                Vector3.Distance(
-                    Camera.transform.position,
-                    Target.transform.position + TargetPositionOffset
-                ),
-                LayerMask
-            );
+            Hits.Clear();
+            Vector3 targetPosition = Target.transform.position + TargetPositionOffset;
 
-            if (hits > 0)
+            float gridSize = 0.1f; // Adjust this value to change the density of the rays
+            Vector3 screenPoint = Camera.WorldToViewportPoint(targetPosition);
+
+            for (float x = -0.5f; x <= 0.5f; x += gridSize)
             {
-                for (int i = 0; i < hits; i++)
+                for (float y = -0.5f; y <= 0.5f; y += gridSize)
                 {
-                    FadingObject fadingObject = GetFadingObjectFromHit(Hits[i]);
+                    Vector3 offset = new Vector3(x, y, 0);
+                    Vector3 rayOrigin = Camera.ViewportToWorldPoint(
+                        new Vector3(
+                            screenPoint.x + offset.x,
+                            screenPoint.y + offset.y,
+                            screenPoint.z
+                        )
+                    );
+                    Vector3 direction = (targetPosition - rayOrigin).normalized;
+                    float maxDistance = Vector3.Distance(rayOrigin, targetPosition);
 
-                    if (fadingObject != null && !ObjectsBlockingView.Contains(fadingObject))
+                    if (
+                        Physics.Raycast(
+                            rayOrigin,
+                            direction,
+                            out RaycastHit hit,
+                            maxDistance,
+                            LayerMask
+                        )
+                    )
                     {
-                        if (RunningCoroutines.ContainsKey(fadingObject))
+                        Hits.Add(hit);
+                        FadingObject fadingObject = GetFadingObjectFromHit(hit);
+
+                        if (fadingObject != null && !ObjectsBlockingView.Contains(fadingObject))
                         {
-                            if (RunningCoroutines[fadingObject] != null)
+                            if (RunningCoroutines.ContainsKey(fadingObject))
                             {
-                                StopCoroutine(RunningCoroutines[fadingObject]);
+                                if (RunningCoroutines[fadingObject] != null)
+                                {
+                                    StopCoroutine(RunningCoroutines[fadingObject]);
+                                }
+
+                                RunningCoroutines.Remove(fadingObject);
                             }
 
-                            RunningCoroutines.Remove(fadingObject);
+                            RunningCoroutines.Add(
+                                fadingObject,
+                                StartCoroutine(FadeObjectOut(fadingObject))
+                            );
+                            ObjectsBlockingView.Add(fadingObject);
                         }
-
-                        RunningCoroutines.Add(
-                            fadingObject,
-                            StartCoroutine(FadeObjectOut(fadingObject))
-                        );
-                        ObjectsBlockingView.Add(fadingObject);
                     }
                 }
             }
 
             FadeObjectsNoLongerBeingHit();
-
-            ClearHits();
-
             yield return null;
         }
     }
@@ -98,9 +113,9 @@ public class FadeObjectBlockingObject : MonoBehaviour
         foreach (FadingObject fadingObject in ObjectsBlockingView)
         {
             bool objectIsBeingHit = false;
-            for (int i = 0; i < Hits.Length; i++)
+            foreach (RaycastHit hit in Hits)
             {
-                FadingObject hitFadingObject = GetFadingObjectFromHit(Hits[i]);
+                FadingObject hitFadingObject = GetFadingObjectFromHit(hit);
                 if (hitFadingObject != null && fadingObject == hitFadingObject)
                 {
                     objectIsBeingHit = true;
@@ -226,13 +241,24 @@ public class FadeObjectBlockingObject : MonoBehaviour
         }
     }
 
-    private void ClearHits()
-    {
-        System.Array.Clear(Hits, 0, Hits.Length);
-    }
-
     private FadingObject GetFadingObjectFromHit(RaycastHit Hit)
     {
         return Hit.collider != null ? Hit.collider.GetComponent<FadingObject>() : null;
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (Camera != null && Target != null)
+        {
+            Gizmos.color = Color.red;
+            Vector3 targetPosition = Target.transform.position + TargetPositionOffset;
+            Gizmos.DrawLine(Camera.transform.position, targetPosition);
+
+            Gizmos.color = Color.blue;
+            foreach (RaycastHit hit in Hits)
+            {
+                Gizmos.DrawSphere(hit.point, 0.1f);
+            }
+        }
     }
 }

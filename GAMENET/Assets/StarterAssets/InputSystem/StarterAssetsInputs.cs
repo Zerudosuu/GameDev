@@ -14,12 +14,12 @@ namespace StarterAssets
         public bool jump;
         public bool sprint;
         public bool aim;
-
         public bool shoot;
 
         public event EventHandler onAimStarted;
         public event EventHandler onAimStopped;
         public event EventHandler onShootStarted;
+        public event EventHandler onShootStopped;
 
         [Header("Movement Settings")]
         public bool analogMovement;
@@ -85,6 +85,11 @@ namespace StarterAssets
             if (newShootState && onShootStarted != null)
             {
                 onShootStarted(this, EventArgs.Empty);
+            }
+            // If shoot stopped, raise the onShootStopped event
+            else if (!newShootState && onShootStopped != null)
+            {
+                onShootStopped(this, EventArgs.Empty);
             }
         }
 

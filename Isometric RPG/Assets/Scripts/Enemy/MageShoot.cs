@@ -1,22 +1,20 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MageShoot : MonoBehaviour
 {
+    Skill skill;
+    public bool isSkilling;
     public GameObject bulletPrefab;
     public Transform player;
     public Transform bulletSpawnPoint;
     public float bulletSpeed = 20f;
 
     #region HitEffect
-
     public float tintFloat;
 
     private Material[] materials;
-    private MeshRenderer meshRenderer;
     private SkinnedMeshRenderer[] skinnedMeshRenderers;
-
     public bool ishit;
 
     private Rigidbody rb;
@@ -32,11 +30,17 @@ public class MageShoot : MonoBehaviour
 
     void Start()
     {
+        skill = GameObject.FindGameObjectWithTag("Player").GetComponent<Skill>();
+
+        if (skill == null)
+        {
+            Debug.LogError("Skill component not found on Player GameObject");
+            return;
+        }
         player = GameObject.FindWithTag("Player").transform;
         spawnEnemy = GameObject.Find("SpawnerSample").GetComponent<SpawnEnemy>();
 
         skinnedMeshRenderers = GetComponentsInChildren<SkinnedMeshRenderer>();
-        meshRenderer = GetComponent<MeshRenderer>();
 
         // Get materials from all SkinnedMeshRenderers
         materials = new Material[skinnedMeshRenderers.Length];
@@ -96,35 +100,57 @@ public class MageShoot : MonoBehaviour
         }
 
         isPlayerFound = spawnEnemy.isPlayerFound;
+
+        // Update the field based on the skill state
+        if (skill != null)
+        {
+            isSkilling = skill.isSkillActive;
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.GetComponent<PlayerCurrentWeapon>() != null)
+        // Check if the collided object is tagged as "Player"
+        if (other.CompareTag("Player"))
         {
-            Health heatlh = GetComponent<Health>();
-            if (!ishit && !heatlh.isDead)
+            // Check if the SphereCollider component is enabled
+            SphereCollider sphereCollider = other.GetComponent<SphereCollider>();
+            if (sphereCollider != null && sphereCollider.enabled)
             {
-                ishit = true;
-                StartCoroutine(ChangeTintTemporarily());
+                print(other.gameObject.name);
 
-                heatlh.TakeDamage(
-                    other.gameObject.GetComponent<PlayerCurrentWeapon>().weapon.Damage
-                );
-
-                if (heatlh.isDead)
+                Health health = GetComponent<Health>();
+                if (!ishit && health != null && !health.isDead)
                 {
-                    NotifyDeath();
-                }
+                    ishit = true;
+                    print("Hit");
 
-                // Apply knockback
-                Vector3 knockbackDirection = (
-                    transform.position - other.transform.position
-                ).normalized;
-                ApplyKnockback(
-                    knockbackDirection,
-                    other.gameObject.GetComponent<PlayerCurrentWeapon>().weapon.knockback
-                );
+                    Stats stats = other.gameObject.GetComponent<Stats>();
+                    float damage = CalculateCriticalDamage(stats, out bool isCritical);
+
+                    health.TakeDamage(damage, isCritical);
+
+                    if (health.isDead)
+                    {
+                        NotifyDeath();
+
+                        PlayerHealth playerHealth = other.GetComponent<PlayerHealth>();
+
+                        float minXP = playerHealth.BaseExperience * 0.1f; // 10% of base XP
+                        float maxXP = playerHealth.BaseExperience * 0.3f; // 30% of base XP
+                        float awardedXP = Random.Range(minXP, maxXP); // Randomized XP within range
+
+                        playerHealth.ExperienceUp(awardedXP);
+                    }
+
+                    StartCoroutine(ChangeTintTemporarily());
+
+                    // Apply knockback
+                    Vector3 knockbackDirection = (
+                        transform.position - other.transform.position
+                    ).normalized;
+                    ApplyKnockback(knockbackDirection, stats.Knockback);
+                }
             }
         }
     }
@@ -159,5 +185,22 @@ public class MageShoot : MonoBehaviour
     private void NotifyDeath()
     {
         OnEnemyDeath?.Invoke(gameObject);
+    }
+
+    private float CalculateCriticalDamage(Stats stats, out bool isCriticalHit)
+    {
+        float damage = stats.baseDamage;
+
+        if (Random.value <= stats.criticalChance)
+        {
+            damage *= stats.criticalDamage;
+            isCriticalHit = true;
+        }
+        else
+        {
+            isCriticalHit = false;
+        }
+
+        return damage;
     }
 }

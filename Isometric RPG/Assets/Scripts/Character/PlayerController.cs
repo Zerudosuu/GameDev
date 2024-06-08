@@ -6,6 +6,8 @@ using UnityEngine.InputSystem;
 
 public class ThirdPersonController : MonoBehaviour
 {
+    Stats stats;
+
     //input fields
     private PlayerInputAction playerActionsAsset;
     private InputAction move;
@@ -28,6 +30,8 @@ public class ThirdPersonController : MonoBehaviour
     private Camera playerCamera;
     private Animator animator;
 
+    Skill skill;
+
     private int currentComboAttack = 1; // Track the current combo attack (1, 2, or 3)`
     private float lastAttackTime = 0f; // Timer for combo window
     private float maxComboDelay = 1f; // Maximum time allowed between attacks for a combo
@@ -36,12 +40,17 @@ public class ThirdPersonController : MonoBehaviour
 
     private void Awake()
     {
+        stats = GetComponent<Stats>();
         rb = this.GetComponent<Rigidbody>();
         playerActionsAsset = new PlayerInputAction();
         animator = gameObject?.GetComponent<Animator>();
 
+        playerCamera = Camera.main;
+
         move = playerActionsAsset.Player.Move;
         attack = playerActionsAsset.Player.Attack;
+
+        skill = GetComponent<Skill>();
     }
 
     private void OnEnable()
@@ -129,5 +138,6 @@ public class ThirdPersonController : MonoBehaviour
     private void DoAttack(InputAction.CallbackContext obj)
     {
         animator.SetTrigger("Attack1");
+        print("Damage" + stats.baseStats.baseDamage);
     }
 }

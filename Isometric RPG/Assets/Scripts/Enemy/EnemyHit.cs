@@ -16,11 +16,22 @@ public class EnemyHit : MonoBehaviour
 
     private Rigidbody rb;
 
+    Skill skill;
+
+    public bool isSkilling;
+
     public delegate void EnemyDeathHandler(GameObject enemy);
     public static event EnemyDeathHandler OnEnemyDeath;
 
     void Start()
     {
+        skill = GameObject.FindGameObjectWithTag("Player").GetComponent<Skill>();
+
+        if (skill == null)
+        {
+            Debug.LogError("Skill component not found on Player GameObject");
+            return;
+        }
         spawnEnemy = GameObject.Find("SpawnerSample").GetComponent<SpawnEnemy>();
         // Get all SkinnedMeshRenderer components in children
         skinnedMeshRenderers = GetComponentsInChildren<SkinnedMeshRenderer>();
@@ -46,6 +57,12 @@ public class EnemyHit : MonoBehaviour
         }
 
         isPlayerFound = spawnEnemy.isPlayerFound;
+
+        // Update the field based on the skill state
+        if (skill != null)
+        {
+            isSkilling = skill.isSkillActive;
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -65,24 +82,31 @@ public class EnemyHit : MonoBehaviour
                     ishit = true;
                     print("Hotdog");
 
-                    PlayerCurrentWeapon playerWeapon = other.GetComponent<PlayerCurrentWeapon>();
-                    if (playerWeapon != null)
+                    Stats stats = other.gameObject.GetComponent<Stats>();
+                    float damage = CalculateCriticalDamage(stats, out bool isCritical);
+
+                    health.TakeDamage(damage, isCritical);
+
+                    if (health.isDead)
                     {
-                        health.TakeDamage(playerWeapon.weapon.Damage);
+                        NotifyDeath();
 
-                        if (health.isDead)
-                        {
-                            NotifyDeath();
-                        }
+                        PlayerHealth playerHealth = other.GetComponent<PlayerHealth>();
 
-                        StartCoroutine(ChangeTintTemporarily());
+                        float minXP = playerHealth.BaseExperience * 0.1f; // 80% of base XP
+                        float maxXP = playerHealth.BaseExperience * 0.3f; // 150% of base XP
+                        float awardedXP = Random.Range(minXP, maxXP); // Randomized XP within range
 
-                        // Apply knockback
-                        Vector3 knockbackDirection = (
-                            transform.position - other.transform.position
-                        ).normalized;
-                        ApplyKnockback(knockbackDirection, playerWeapon.weapon.knockback);
+                        playerHealth.ExperienceUp(awardedXP);
                     }
+
+                    StartCoroutine(ChangeTintTemporarily());
+
+                    // Apply knockback
+                    Vector3 knockbackDirection = (
+                        transform.position - other.transform.position
+                    ).normalized;
+                    ApplyKnockback(knockbackDirection, stats.Knockback);
                 }
             }
         }
@@ -118,5 +142,22 @@ public class EnemyHit : MonoBehaviour
     private void NotifyDeath()
     {
         OnEnemyDeath?.Invoke(gameObject);
+    }
+
+    private float CalculateCriticalDamage(Stats stats, out bool isCriticalHit)
+    {
+        float damage = stats.baseDamage;
+
+        if (Random.value <= stats.criticalChance)
+        {
+            damage *= stats.criticalDamage;
+            isCriticalHit = true;
+        }
+        else
+        {
+            isCriticalHit = false;
+        }
+
+        return damage;
     }
 }

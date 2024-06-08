@@ -1,11 +1,11 @@
+using System.Collections;
 using UnityEngine;
 
 public class SmoothCameraFollow : MonoBehaviour
 {
     #region Variables
 
-    [SerializeField]
-    private Transform target;
+    public Transform target;
 
     [SerializeField]
     private float smoothTime;
@@ -15,6 +15,24 @@ public class SmoothCameraFollow : MonoBehaviour
     #endregion
 
     #region Unity callbacks
+
+    private void Awake()
+    {
+        StartCoroutine(FindTargetCoroutine());
+    }
+
+    private IEnumerator FindTargetCoroutine()
+    {
+        while (target == null)
+        {
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            if (player != null)
+            {
+                target = player.transform;
+            }
+            yield return new WaitForSeconds(0.1f); // Check every 0.1 seconds
+        }
+    }
 
     private void LateUpdate()
     {

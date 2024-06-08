@@ -1509,9 +1509,24 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5300652054417080284, guid: 64dce48905ffd9b4293e595fa6941544,
         type: 3}
+      propertyPath: Range
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 5300652054417080284, guid: 64dce48905ffd9b4293e595fa6941544,
+        type: 3}
+      propertyPath: hitPrefeb
+      value: 
+      objectReference: {fileID: 157586, guid: 2574ca206a571a342a7fab69fdfb87aa, type: 3}
+    - target: {fileID: 5300652054417080284, guid: 64dce48905ffd9b4293e595fa6941544,
+        type: 3}
       propertyPath: debugTransform
       value: 
       objectReference: {fileID: 1485384227}
+    - target: {fileID: 5300652054417080284, guid: 64dce48905ffd9b4293e595fa6941544,
+        type: 3}
+      propertyPath: shootingCamera
+      value: 
+      objectReference: {fileID: 1890446868}
     - target: {fileID: 5300652054417080284, guid: 64dce48905ffd9b4293e595fa6941544,
         type: 3}
       propertyPath: aimVirtualCamera
@@ -1684,6 +1699,12 @@ MonoBehaviour:
 --- !u!4 &1890446865 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8944336655422409503, guid: f6d148d888ffbf54b9afe9936dfaec1f,
+    type: 3}
+  m_PrefabInstance: {fileID: 1221041499}
+  m_PrefabAsset: {fileID: 0}
+--- !u!20 &1890446868 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 8944336655422409496, guid: f6d148d888ffbf54b9afe9936dfaec1f,
     type: 3}
   m_PrefabInstance: {fileID: 1221041499}
   m_PrefabAsset: {fileID: 0}

@@ -1,0 +1,8 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <ui:VisualElement name="UIContainer" style="flex-grow: 1; -unity-text-align: upper-center;">
+        <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Wave" style="font-size: 39px; height: 112px;" />
+    </ui:VisualElement>
+    <ui:VisualElement name="AmmoWeapon" style="flex-grow: 1; align-items: auto; align-self: flex-start; justify-content: flex-end; width: 100%; height: 100%;">
+        <ui:Label tabindex="-1" text="Ronald&#10;" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Ammo" style="font-size: 30px; position: absolute; top: 848px; left: 130px; width: 500px; height: 100px;" />
+    </ui:VisualElement>
+</ui:UXML>

@@ -19,7 +19,8 @@ MonoBehaviour:
     - {fileID: 3931820529819902549, guid: 4f7ab8325791ee640bfe1f05cf1f8c24, type: 3}
     Boss: []
     BossEntrance: []
-    Social: []
+    Social:
+    - {fileID: 4230402062115782746, guid: 7cd8b7847a4e631478bf7490a678a2ee, type: 3}
     Entrance:
     - {fileID: 7114107107499430127, guid: 25469d17fd20d6c4e9ae224d8336a69b, type: 3}
     Corridors:

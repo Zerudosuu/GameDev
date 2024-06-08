@@ -12,13 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a686a47eee2fa44cb0a34b5d86e4d5e, type: 3}
   m_Name: IdleMage
   m_EditorClassIdentifier: 
-  _serializedGraph: '{"type":"NodeCanvas.BehaviourTrees.BehaviourTree","nodes":[{"dynamic":true,"_position":{"x":728.0,"y":163.0},"$type":"NodeCanvas.BehaviourTrees.Selector","$id":"0"},{"_action":{"animator":{"_name":"MageAnimator","_targetVariableID":"88afeb8b-6375-47da-b60f-e8d491c2bf14"},"duration":{"_value":0.24},"clipName":"Idle","$type":"SetAnimationClipTask"},"_position":{"x":689.0439,"y":354.9916},"$type":"NodeCanvas.BehaviourTrees.ActionNode","$id":"1"}],"connections":[{"_sourceNode":{"$ref":"0"},"_targetNode":{"$ref":"1"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"}],"canvasGroups":[],"localBlackboard":{"_variables":{}},"derivedData":{"repeat":true,"$type":"NodeCanvas.BehaviourTrees.BehaviourTree+DerivedSerializationData"}}'
+  _serializedGraph: '{"type":"NodeCanvas.BehaviourTrees.BehaviourTree","nodes":[{"dynamic":true,"_position":{"x":728.0,"y":163.0},"$type":"NodeCanvas.BehaviourTrees.Selector","$id":"0"},{"_action":{"actions":[{"animator":{"_name":"MageAnimator","_targetVariableID":"88afeb8b-6375-47da-b60f-e8d491c2bf14"},"duration":{"_value":0.24},"clipName":"Idle","$type":"SetAnimationClipTask"},{"saveComponentAs":{"_name":""},"saveGameObjectAs":{"_name":""},"$type":"NodeCanvas.Tasks.Actions.FindObjectOfType`1[[UnityEngine.MonoBehaviour,
+    UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"}],"$type":"NodeCanvas.Framework.ActionList"},"_position":{"x":691.0439,"y":353.9916},"$type":"NodeCanvas.BehaviourTrees.ActionNode","$id":"1"}],"connections":[{"_sourceNode":{"$ref":"0"},"_targetNode":{"$ref":"1"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"}],"canvasGroups":[],"localBlackboard":{"_variables":{}},"derivedData":{"repeat":true,"$type":"NodeCanvas.BehaviourTrees.BehaviourTree+DerivedSerializationData"}}'
   _objectReferences: []
   _graphSource:
     _version: 3.3
     _category: 
     _comments: 
-    _translation: {x: -449, y: 72}
-    _zoomFactor: 0.7500925
+    _translation: {x: 250.90454, y: -15.995874}
+    _zoomFactor: 1
   _haltSerialization: 0
   _externalSerializationFile: {fileID: 0}

@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 866d3163d53daab48aec1547775402d1, type: 3}
   m_Name: GeneratorSettings
   m_EditorClassIdentifier: 
-  CellSize: {x: 1, y: 1, z: 1}
+  CellSize: {x: 1, y: 0.5, z: 1}
   ColliderSizeTolerance: 0.1
   OutlineComputationMode: 0

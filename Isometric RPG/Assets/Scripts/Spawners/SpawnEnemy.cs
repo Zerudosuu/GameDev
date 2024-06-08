@@ -11,6 +11,8 @@ public class SpawnEnemy : MonoBehaviour
     private int EnemyCount;
     private int EnemyDead;
 
+    public GameObject[] Gates;
+
     public Vector3 areaSize = new Vector3(50, 1, 50);
 
     void Start()
@@ -32,11 +34,13 @@ public class SpawnEnemy : MonoBehaviour
         {
             StartSpawn();
             isSpawned = true;
+            ActivateGates(true); // Activate gates when player is found and enemies start spawning
         }
 
         if (EnemyDead >= EnemyCount)
         {
             print("Success stage");
+            ActivateGates(false); // Deactivate gates after success stage
         }
     }
 
@@ -68,5 +72,13 @@ public class SpawnEnemy : MonoBehaviour
     private void OnEnemyDeath(GameObject enemy)
     {
         EnemyDead++;
+    }
+
+    private void ActivateGates(bool activate)
+    {
+        foreach (GameObject gate in Gates)
+        {
+            gate.SetActive(activate);
+        }
     }
 }

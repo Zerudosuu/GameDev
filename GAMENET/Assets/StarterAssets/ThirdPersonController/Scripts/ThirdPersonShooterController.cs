@@ -26,18 +26,22 @@ public class ThirdPersonShooterController : MonoBehaviour
     private Transform debugTransform;
 
     [SerializeField]
-    private Transform pfBulletProjectile;
+    private Camera shootingCamera;
 
-    [SerializeField]
-    private Transform spawnBulletPosition;
+    public float Range = 100f;
 
-    StarterAssetsInputs starterAssetsInputs;
-    ThirdPersonController thirdPersonController;
-    Animator animator;
+    private StarterAssetsInputs starterAssetsInputs;
+    private ThirdPersonController thirdPersonController;
+    private Animator animator;
 
     private bool isAiming = false;
     private bool isShooting;
     private float aimRigWeight;
+
+    #region Hit
+    [SerializeField]
+    private GameObject hitPrefab;
+    #endregion
 
     void Awake()
     {
@@ -45,10 +49,11 @@ public class ThirdPersonShooterController : MonoBehaviour
         thirdPersonController = GetComponent<ThirdPersonController>();
         starterAssetsInputs = GetComponent<StarterAssetsInputs>();
 
-        // Subscribe to aim events
+        // Subscribe to aim and shoot events
         starterAssetsInputs.onAimStarted += OnAimStarted;
         starterAssetsInputs.onAimStopped += OnAimStopped;
         starterAssetsInputs.onShootStarted += OnShootStarted;
+        starterAssetsInputs.onShootStopped += OnShootStopped;
     }
 
     void Update()
@@ -76,24 +81,38 @@ public class ThirdPersonShooterController : MonoBehaviour
 
     private void HandleShooting()
     {
-        // Handle shooting logic
         if (isAiming && isShooting)
         {
-            Vector3 aimDirection = (
-                debugTransform.position - spawnBulletPosition.position
-            ).normalized;
-            Instantiate(
-                pfBulletProjectile,
-                spawnBulletPosition.position,
-                Quaternion.LookRotation(aimDirection, Vector3.up)
-            );
-            isShooting = false;
+            RaycastHit hit;
+            if (
+                Physics.Raycast(
+                    shootingCamera.transform.position,
+                    shootingCamera.transform.forward,
+                    out hit,
+                    Range,
+                    aimColliderLayer
+                )
+            )
+            {
+                Debug.Log("Hit: " + hit.collider.gameObject.name);
+                GameObject Impact = Instantiate(
+                    hitPrefab,
+                    hit.point,
+                    Quaternion.LookRotation(hit.normal)
+                );
+
+                Destroy(Impact, 2f);
+                // Add logic to apply damage or effects to the hit object here
+            }
+            else
+            {
+                Debug.Log("Missed");
+            }
         }
     }
 
     private void HandleAiming()
     {
-        // Handle aiming logic
         if (isAiming)
         {
             aimVirtualCamera.gameObject.SetActive(true);
@@ -126,6 +145,11 @@ public class ThirdPersonShooterController : MonoBehaviour
     private void OnShootStarted(object sender, EventArgs e)
     {
         isShooting = true;
+    }
+
+    private void OnShootStopped(object sender, EventArgs e)
+    {
+        isShooting = false;
     }
 
     private void OnAimStarted(object sender, EventArgs e)
